@@ -11,12 +11,12 @@ import java.util.UUID;
 @Service
 class AddressServiceImpl implements AddressService {
 
+    private final AddressRepository addressRepository;
+
     @Autowired
     private AddressServiceImpl(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
-
-    private final AddressRepository addressRepository;
 
     @Override
     public Address create(AddressCreate addressCreate) {

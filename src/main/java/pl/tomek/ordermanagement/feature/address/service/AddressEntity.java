@@ -1,8 +1,8 @@
 package pl.tomek.ordermanagement.feature.address.service;
 
-import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
+import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 
 class AddressEntity extends BaseEntity {
     private String streetName;
@@ -12,6 +12,9 @@ class AddressEntity extends BaseEntity {
     private String zipCode;
     private String voivodeship;
     private String country;
+
+    private AddressEntity() {
+    }
 
     public static AddressEntity of(AddressCreate addressCreate) {
         AddressEntity addressEntity = new AddressEntity();
@@ -36,8 +39,5 @@ class AddressEntity extends BaseEntity {
                 this.voivodeship,
                 this.country
         );
-    }
-
-    private AddressEntity() {
     }
 }

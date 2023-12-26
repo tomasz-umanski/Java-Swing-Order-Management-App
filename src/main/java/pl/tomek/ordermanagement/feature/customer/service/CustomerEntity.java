@@ -1,9 +1,8 @@
 package pl.tomek.ordermanagement.feature.customer.service;
 
-import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
-import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
+import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 
 import java.util.UUID;
 
@@ -14,6 +13,9 @@ class CustomerEntity extends BaseEntity {
     String taxIdNumber;
     UUID homeAddressId;
     UUID shippingAddressId;
+
+    private CustomerEntity() {
+    }
 
     public static CustomerEntity of(CustomerCreate customerCreate) {
         CustomerEntity customerEntity = new CustomerEntity();
@@ -36,8 +38,5 @@ class CustomerEntity extends BaseEntity {
                 this.homeAddressId,
                 this.shippingAddressId
         );
-    }
-
-    private CustomerEntity() {
     }
 }
