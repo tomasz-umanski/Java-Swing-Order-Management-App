@@ -9,7 +9,7 @@ import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "address")
+@Table(name = "t_address")
 class AddressEntity {
     @Id
     private final UUID id = UUID.randomUUID();

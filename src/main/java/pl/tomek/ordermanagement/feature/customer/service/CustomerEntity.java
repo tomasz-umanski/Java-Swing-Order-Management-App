@@ -9,10 +9,10 @@ import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "t_customer")
 class CustomerEntity {
     @Id
-    final UUID id = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
     private String name;
     private String lastName;
     private String companyName;

@@ -3,52 +3,54 @@ package pl.tomek.ordermanagement.feature.address;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.tomek.ordermanagement.BaseTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.feature.address.api.AddressService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AddressServiceTest extends BaseTest {
+@SpringBootTest
+@ActiveProfiles("test")
+class AddressServiceTest {
 
     @Autowired
-    private AddressService addressService;
+    private AddressService service;
 
-    private final AddressCreate addressCreate = new AddressCreate(
+    private static final AddressCreate addressCreate = new AddressCreate(
             "a",
             "b",
             "c", "Kielce",
             "25-666",
-            "Świętokrzskie",
+            "Świętokrzyskie",
             "Poland"
     );
 
-
     @Test
     void shouldSaveAssetAndAssignAnId() {
-        Address createdAddress = addressService.create(addressCreate);
+        Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
-        Address createdAddress = addressService.create(addressCreate);
+        Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
 
-        Address retrievedAddress = addressService.getById(createdAddress.id());
+        Address retrievedAddress = service.getById(createdAddress.id());
         assertNotNull(retrievedAddress);
         assertEquals(retrievedAddress.city(), addressCreate.city());
     }
 
     @Test
     void shouldSaveAndDeleteAsset() {
-        Address createdAddress = addressService.create(addressCreate);
+        Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
 
-        addressService.delete(createdAddress.id());
+        service.delete(createdAddress.id());
 
-        assertThrows(EntityNotFoundException.class, () -> addressService.getById(createdAddress.id()));
+        assertThrows(EntityNotFoundException.class, () -> service.getById(createdAddress.id()));
     }
 
 

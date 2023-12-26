@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan(basePackages = "pl.tomek")
 @EnableJpaRepositories(basePackages = "pl.tomek")
-public class OrdermanagementApplication {
+public class OrderManagementApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrdermanagementApplication.class, args);
+        SpringApplication.run(OrderManagementApplication.class, args);
     }
 
 }
