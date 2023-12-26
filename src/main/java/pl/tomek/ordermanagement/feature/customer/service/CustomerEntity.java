@@ -1,21 +1,24 @@
 package pl.tomek.ordermanagement.feature.customer.service;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
-import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 
 import java.util.UUID;
 
-class CustomerEntity extends BaseEntity {
-    String name;
-    String lastName;
-    String companyName;
-    String taxIdNumber;
-    UUID homeAddressId;
-    UUID shippingAddressId;
-
-    private CustomerEntity() {
-    }
+@Entity
+@Table(name = "customer")
+class CustomerEntity {
+    @Id
+    final UUID id = UUID.randomUUID();
+    private String name;
+    private String lastName;
+    private String companyName;
+    private String taxIdNumber;
+    private UUID homeAddressId;
+    private UUID shippingAddressId;
 
     public static CustomerEntity of(CustomerCreate customerCreate) {
         CustomerEntity customerEntity = new CustomerEntity();

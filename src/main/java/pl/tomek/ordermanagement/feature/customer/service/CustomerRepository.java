@@ -1,17 +1,15 @@
 package pl.tomek.ordermanagement.feature.customer.service;
 
-import pl.tomek.ordermanagement.feature.customer.api.Customer;
-import pl.tomek.ordermanagement.feature.database.api.InMemoryRepository;
-import pl.tomek.ordermanagement.model.SortDirection;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
+import java.util.UUID;
 
-interface CustomerRepository extends InMemoryRepository<CustomerEntity> {
-    Set<Customer> get(Date from, Date to);
-
-    Set<Customer> get(BigDecimal grossPrice);
-
-    Set<Customer> get(BigDecimal grossPrice, SortDirection sortDirection);
+@Repository
+interface CustomerRepository extends JpaRepository<CustomerEntity, UUID> {
+//    Set<Customer> get(Date from, Date to);
+//
+//    Set<Customer> get(BigDecimal grossPrice);
+//
+//    Set<Customer> get(BigDecimal grossPrice, SortDirection sortDirection);
 }

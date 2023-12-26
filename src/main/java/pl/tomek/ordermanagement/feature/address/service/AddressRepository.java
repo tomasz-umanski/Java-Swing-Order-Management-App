@@ -1,8 +1,10 @@
 package pl.tomek.ordermanagement.feature.address.service;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.tomek.ordermanagement.feature.database.api.InMemoryRepository;
+
+import java.util.UUID;
 
 @Repository
-interface AddressRepository extends InMemoryRepository<AddressEntity> {
+interface AddressRepository extends JpaRepository<AddressEntity, UUID> {
 }

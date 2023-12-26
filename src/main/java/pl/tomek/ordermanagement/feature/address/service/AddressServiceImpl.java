@@ -1,5 +1,6 @@
 package pl.tomek.ordermanagement.feature.address.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.feature.address.api.Address;
@@ -14,24 +15,25 @@ class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Autowired
-    private AddressServiceImpl(AddressRepository addressRepository) {
+    AddressServiceImpl(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
 
     @Override
     public Address create(AddressCreate addressCreate) {
         AddressEntity addressEntity = AddressEntity.of(addressCreate);
-        AddressEntity savedAddressEntity = addressRepository.create(addressEntity);
+        AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
         return savedAddressEntity.toDomain();
     }
 
     @Override
     public void delete(UUID id) {
-        addressRepository.delete(id);
+        addressRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public Address getById(UUID id) {
-        return addressRepository.getById(id).toDomain();
+        return addressRepository.getReferenceById(id).toDomain();
     }
 }

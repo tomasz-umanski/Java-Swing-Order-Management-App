@@ -1,10 +1,8 @@
 package pl.tomek.ordermanagement;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class OrdermanagementApplicationTests {
+class OrdermanagementApplicationTests extends BaseTest {
 
     @Test
     void contextLoads() {

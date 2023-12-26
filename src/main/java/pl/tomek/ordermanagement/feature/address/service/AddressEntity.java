@@ -1,10 +1,18 @@
 package pl.tomek.ordermanagement.feature.address.service;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
-import pl.tomek.ordermanagement.feature.database.api.BaseEntity;
 
-class AddressEntity extends BaseEntity {
+import java.util.UUID;
+
+@Entity
+@Table(name = "address")
+class AddressEntity {
+    @Id
+    private final UUID id = UUID.randomUUID();
     private String streetName;
     private String buildingNumber;
     private String flatNumber;
@@ -12,9 +20,6 @@ class AddressEntity extends BaseEntity {
     private String zipCode;
     private String voivodeship;
     private String country;
-
-    private AddressEntity() {
-    }
 
     public static AddressEntity of(AddressCreate addressCreate) {
         AddressEntity addressEntity = new AddressEntity();
