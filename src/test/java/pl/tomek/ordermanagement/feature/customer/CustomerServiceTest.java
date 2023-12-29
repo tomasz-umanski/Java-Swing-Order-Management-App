@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerService;
+import pl.tomek.ordermanagement.feature.customer.exception.CustomerCreateValidatorException;
 
 import java.util.Set;
 import java.util.UUID;
@@ -21,23 +22,16 @@ class CustomerServiceTest {
     @Autowired
     private CustomerService service;
 
-    private static final CustomerCreate customerCreate = new CustomerCreate(
-            "Jan",
-            "Testowy",
-            "Firma",
-            "1234563218",
-            UUID.randomUUID(),
-            UUID.randomUUID()
-    );
-
     @Test
     void shouldSaveAssetAndAssignAnId() {
+        CustomerCreate customerCreate = mockCustomerCreate();
         Customer createdCustomer = service.create(customerCreate);
         assertNotNull(createdCustomer.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
+        CustomerCreate customerCreate = mockCustomerCreate();
         Customer createdCustomer = service.create(customerCreate);
         assertNotNull(createdCustomer.id());
 
@@ -48,6 +42,7 @@ class CustomerServiceTest {
 
     @Test
     void shouldSaveAssetsAndRetrieveAll() {
+        CustomerCreate customerCreate = mockCustomerCreate();
         service.create(customerCreate);
         service.create(customerCreate);
 
@@ -59,11 +54,40 @@ class CustomerServiceTest {
 
     @Test
     void shouldSaveAndDeleteAsset() {
+        CustomerCreate customerCreate = mockCustomerCreate();
         Customer createdCustomer = service.create(customerCreate);
         assertNotNull(createdCustomer.id());
 
         service.delete(createdCustomer.id());
 
         assertThrows(EntityNotFoundException.class, () -> service.getById(createdCustomer.id()));
+    }
+
+    @Test
+    void shouldThrowValidatorException() {
+        CustomerCreate customerCreate = mockCustomerCreateWithoutName();
+        assertThrows(CustomerCreateValidatorException.class, () -> service.create(customerCreate));
+    }
+
+    private CustomerCreate mockCustomerCreate() {
+        return new CustomerCreate(
+                "Jan",
+                "Testowy",
+                "Firma",
+                "1234563218",
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
+    }
+
+    private CustomerCreate mockCustomerCreateWithoutName() {
+        return new CustomerCreate(
+                null,
+                "Testowy",
+                "Firma",
+                "1234563218",
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
     }
 }

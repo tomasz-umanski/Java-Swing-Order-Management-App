@@ -1,9 +1,11 @@
 package pl.tomek.ordermanagement.feature.address.api;
 
+import jakarta.validation.Valid;
+
 import java.util.UUID;
 
 public interface AddressService {
-    Address create(AddressCreate addressCreate);
+    Address create(@Valid AddressCreate addressCreate);
 
     void delete(UUID id);
 

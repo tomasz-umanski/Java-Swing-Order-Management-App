@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.product.api.Product;
 import pl.tomek.ordermanagement.feature.product.api.ProductCreate;
 import pl.tomek.ordermanagement.feature.product.api.ProductService;
+import pl.tomek.ordermanagement.feature.product.exception.ProductCreateValidatorException;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -68,11 +69,30 @@ class ProductServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(createdProduct.id()));
     }
 
+    @Test
+    void shouldThrowValidatorException() {
+        ProductCreate productCreate = mockProductCreateWithoutName();
+        assertThrows(ProductCreateValidatorException.class, () -> service.create(productCreate));
+    }
 
     private ProductCreate mockProductCreate() {
         return new ProductCreate(
-                "Komputer",
-                "Super wydajny komputer",
+                "Notebook",
+                "15 inch ultra thin",
+                UUID.randomUUID().toString(),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(123),
+                BigDecimal.valueOf(1),
+                BigDecimal.valueOf(2),
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(4)
+        );
+    }
+
+    private ProductCreate mockProductCreateWithoutName() {
+        return new ProductCreate(
+                "",
+                "15 inch ultra thin",
                 UUID.randomUUID().toString(),
                 BigDecimal.valueOf(100),
                 BigDecimal.valueOf(123),

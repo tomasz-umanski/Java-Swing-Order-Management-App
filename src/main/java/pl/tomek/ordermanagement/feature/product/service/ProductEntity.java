@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import pl.tomek.ordermanagement.feature.product.api.Product;
 import pl.tomek.ordermanagement.feature.product.api.ProductCreate;
 
@@ -15,11 +16,15 @@ import java.util.UUID;
 class ProductEntity {
     @Id
     private final UUID id = UUID.randomUUID();
+    @NotNull
     private String name;
     private String description;
+    @NotNull
     @Column(unique = true)
     private String SKU;
+    @NotNull
     private BigDecimal estimatedNetUnitPrice;
+    @NotNull
     private BigDecimal estimatedGrossUnitPrice;
     private BigDecimal length;
     private BigDecimal height;

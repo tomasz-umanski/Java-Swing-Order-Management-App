@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.feature.address.api.AddressService;
+import pl.tomek.ordermanagement.feature.address.exception.AddressCreateValidatorException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,23 +19,16 @@ class AddressServiceTest {
     @Autowired
     private AddressService service;
 
-    private static final AddressCreate addressCreate = new AddressCreate(
-            "a",
-            "b",
-            "c", "Kielce",
-            "25-666",
-            "Świętokrzyskie",
-            "Poland"
-    );
-
     @Test
     void shouldSaveAssetAndAssignAnId() {
+        AddressCreate addressCreate = mockAddressCreate();
         Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
+        AddressCreate addressCreate = mockAddressCreate();
         Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
 
@@ -45,6 +39,7 @@ class AddressServiceTest {
 
     @Test
     void shouldSaveAndDeleteAsset() {
+        AddressCreate addressCreate = mockAddressCreate();
         Address createdAddress = service.create(addressCreate);
         assertNotNull(createdAddress.id());
 
@@ -53,5 +48,33 @@ class AddressServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(createdAddress.id()));
     }
 
+    @Test
+    void shouldThrowValidatorException() {
+        AddressCreate addressCreate = mockAddressCreateWithoutStreetName();
+        assertThrows(AddressCreateValidatorException.class, () -> service.create(addressCreate));
+    }
 
+    private AddressCreate mockAddressCreate() {
+        return new AddressCreate(
+                "a",
+                "b",
+                "c",
+                "Kielce",
+                "25-666",
+                "Świętokrzyskie",
+                "Poland"
+        );
+    }
+
+    private AddressCreate mockAddressCreateWithoutStreetName() {
+        return new AddressCreate(
+                null,
+                "b",
+                "c",
+                "Kielce",
+                "25-666",
+                "Świętokrzyskie",
+                "Poland"
+        );
+    }
 }

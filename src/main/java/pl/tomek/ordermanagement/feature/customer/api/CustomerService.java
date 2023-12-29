@@ -1,10 +1,12 @@
 package pl.tomek.ordermanagement.feature.customer.api;
 
+import jakarta.validation.Valid;
+
 import java.util.Set;
 import java.util.UUID;
 
 public interface CustomerService {
-    Customer create(CustomerCreate customerCreate);
+    Customer create(@Valid CustomerCreate customerCreate);
 
     void delete(UUID id);
 

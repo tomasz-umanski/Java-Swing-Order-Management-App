@@ -3,6 +3,7 @@ package pl.tomek.ordermanagement.feature.customer.service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 
@@ -13,10 +14,13 @@ import java.util.UUID;
 class CustomerEntity {
     @Id
     private final UUID id = UUID.randomUUID();
+    @NotNull
     private String name;
+    @NotNull
     private String lastName;
     private String companyName;
     private String taxIdNumber;
+    @NotNull
     private UUID homeAddressId;
     private UUID shippingAddressId;
 

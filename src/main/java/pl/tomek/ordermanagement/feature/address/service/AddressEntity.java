@@ -3,6 +3,7 @@ package pl.tomek.ordermanagement.feature.address.service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 
@@ -13,12 +14,18 @@ import java.util.UUID;
 class AddressEntity {
     @Id
     private final UUID id = UUID.randomUUID();
+    @NotNull
     private String streetName;
+    @NotNull
     private String buildingNumber;
     private String flatNumber;
+    @NotNull
     private String city;
+    @NotNull
     private String zipCode;
+    @NotNull
     private String voivodeship;
+    @NotNull
     private String country;
 
     public static AddressEntity of(AddressCreate addressCreate) {

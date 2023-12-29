@@ -3,6 +3,7 @@ package pl.tomek.ordermanagement.feature.orderItem.service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemCreate;
 
@@ -14,10 +15,14 @@ import java.util.UUID;
 class OrderItemEntity {
     @Id
     private final UUID id = UUID.randomUUID();
+    @NotNull
     private UUID orderId;
+    @NotNull
     private BigDecimal quantity;
     private BigDecimal discount;
+    @NotNull
     private BigDecimal netPrice;
+    @NotNull
     private BigDecimal grossPrice;
 
     public static OrderItemEntity of(OrderItemCreate orderItemCreate) {

@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.order.api.Order;
 import pl.tomek.ordermanagement.feature.order.api.OrderCreate;
 import pl.tomek.ordermanagement.feature.order.api.OrderService;
+import pl.tomek.ordermanagement.feature.order.exception.OrderCreateValidatorException;
 
 import java.util.Date;
 import java.util.Set;
@@ -22,20 +23,16 @@ class OrderServiceTest {
     @Autowired
     private OrderService service;
 
-    private static final OrderCreate orderCreate = new OrderCreate(
-            new Date(),
-            UUID.randomUUID(),
-            UUID.randomUUID()
-    );
-
     @Test
     void shouldSaveAssetAndAssignAnId() {
+        OrderCreate orderCreate = mockOrderCreate();
         Order createdOrder = service.create(orderCreate);
         assertNotNull(createdOrder.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
+        OrderCreate orderCreate = mockOrderCreate();
         Order createdOrder = service.create(orderCreate);
         assertNotNull(createdOrder.id());
 
@@ -46,6 +43,7 @@ class OrderServiceTest {
 
     @Test
     void shouldSaveAssetsAndRetrieveAll() {
+        OrderCreate orderCreate = mockOrderCreate();
         service.create(orderCreate);
         service.create(orderCreate);
 
@@ -57,11 +55,34 @@ class OrderServiceTest {
 
     @Test
     void shouldSaveAndDeleteAsset() {
+        OrderCreate orderCreate = mockOrderCreate();
         Order createdOrder = service.create(orderCreate);
         assertNotNull(createdOrder.id());
 
         service.delete(createdOrder.id());
 
         assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrder.id()));
+    }
+
+    @Test
+    void shouldThrowValidatorException() {
+        OrderCreate orderCreate = mockOrderCreateWithoutOrderDate();
+        assertThrows(OrderCreateValidatorException.class, () -> service.create(orderCreate));
+    }
+
+    private OrderCreate mockOrderCreate() {
+        return new OrderCreate(
+                new Date(),
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
+    }
+
+    private OrderCreate mockOrderCreateWithoutOrderDate() {
+        return new OrderCreate(
+                null,
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
     }
 }

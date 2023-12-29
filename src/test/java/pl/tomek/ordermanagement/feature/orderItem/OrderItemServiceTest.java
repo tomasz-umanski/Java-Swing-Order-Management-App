@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemCreate;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemService;
+import pl.tomek.ordermanagement.feature.orderItem.exception.OrderItemCreateValidatorException;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -21,22 +22,16 @@ public class OrderItemServiceTest {
     @Autowired
     private OrderItemService service;
 
-    private static final OrderItemCreate orderItemCreate = new OrderItemCreate(
-            UUID.randomUUID(),
-            BigDecimal.valueOf(5),
-            BigDecimal.valueOf(10),
-            BigDecimal.valueOf(100),
-            BigDecimal.valueOf(123)
-    );
-
     @Test
     void shouldSaveAssetAndAssignAnId() {
+        OrderItemCreate orderItemCreate = mockOrderItemCreate();
         OrderItem createdOrderItem = service.create(orderItemCreate);
         assertNotNull(createdOrderItem.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
+        OrderItemCreate orderItemCreate = mockOrderItemCreate();
         OrderItem createdOrderItem = service.create(orderItemCreate);
         assertNotNull(createdOrderItem.id());
 
@@ -47,6 +42,7 @@ public class OrderItemServiceTest {
 
     @Test
     void shouldSaveAssetsAndRetrieveAll() {
+        OrderItemCreate orderItemCreate = mockOrderItemCreate();
         service.create(orderItemCreate);
         service.create(orderItemCreate);
 
@@ -58,11 +54,38 @@ public class OrderItemServiceTest {
 
     @Test
     void shouldSaveAndDeleteAsset() {
+        OrderItemCreate orderItemCreate = mockOrderItemCreate();
         OrderItem createdOrderItem = service.create(orderItemCreate);
         assertNotNull(createdOrderItem.id());
 
         service.delete(createdOrderItem.id());
 
         assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrderItem.id()));
+    }
+
+    @Test
+    void shouldThrowValidatorException() {
+        OrderItemCreate orderItemCreate = mockOrderItemCreateWithoutOrderId();
+        assertThrows(OrderItemCreateValidatorException.class, () -> service.create(orderItemCreate));
+    }
+
+    private OrderItemCreate mockOrderItemCreate() {
+        return new OrderItemCreate(
+                UUID.randomUUID(),
+                BigDecimal.valueOf(5),
+                BigDecimal.valueOf(10),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(123)
+        );
+    }
+
+    private OrderItemCreate mockOrderItemCreateWithoutOrderId() {
+        return new OrderItemCreate(
+                null,
+                BigDecimal.valueOf(5),
+                BigDecimal.valueOf(10),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(123)
+        );
     }
 }

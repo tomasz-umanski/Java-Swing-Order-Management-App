@@ -6,21 +6,31 @@ import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.feature.address.api.AddressService;
+import pl.tomek.ordermanagement.feature.address.exception.AddressCreateValidatorException;
+import pl.tomek.ordermanagement.feature.validation.ObjectsValidator;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
+    private final ObjectsValidator<AddressCreate> validator;
 
     @Autowired
-    AddressServiceImpl(AddressRepository addressRepository) {
+    AddressServiceImpl(AddressRepository addressRepository,
+                       ObjectsValidator<AddressCreate> validator) {
         this.addressRepository = addressRepository;
+        this.validator = validator;
     }
 
     @Override
     public Address create(AddressCreate addressCreate) {
+        Set<String> violations = validator.validate(addressCreate);
+        if (!violations.isEmpty()) {
+            throw new AddressCreateValidatorException(violations);
+        }
         AddressEntity addressEntity = AddressEntity.of(addressCreate);
         AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
         return savedAddressEntity.toDomain();
