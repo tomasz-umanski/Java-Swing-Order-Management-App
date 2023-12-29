@@ -3,8 +3,7 @@ package pl.tomek.ordermanagement.feature.orderItem;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import pl.tomek.ordermanagement.annotation.UnitTest;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemCreate;
 import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemService;
@@ -16,9 +15,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class OrderItemServiceTest {
+@UnitTest
+public class OrderDtoItemServiceTest {
     @Autowired
     private OrderItemService service;
 
@@ -72,6 +70,7 @@ public class OrderItemServiceTest {
     private OrderItemCreate mockOrderItemCreate() {
         return new OrderItemCreate(
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 BigDecimal.valueOf(5),
                 BigDecimal.valueOf(10),
                 BigDecimal.valueOf(100),
@@ -82,6 +81,7 @@ public class OrderItemServiceTest {
     private OrderItemCreate mockOrderItemCreateWithoutOrderId() {
         return new OrderItemCreate(
                 null,
+                UUID.randomUUID(),
                 BigDecimal.valueOf(5),
                 BigDecimal.valueOf(10),
                 BigDecimal.valueOf(100),

@@ -3,12 +3,13 @@ package pl.tomek.ordermanagement.feature.order.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.tomek.ordermanagement.feature.order.api.Order;
+import pl.tomek.ordermanagement.feature.order.api.OrderDto;
 import pl.tomek.ordermanagement.feature.order.api.OrderCreate;
 import pl.tomek.ordermanagement.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.feature.order.exception.OrderCreateValidatorException;
 import pl.tomek.ordermanagement.feature.validation.ObjectsValidator;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order create(OrderCreate orderCreate) {
+    public OrderDto create(OrderCreate orderCreate) {
         Set<String> violations = validator.validate(orderCreate);
         if (!violations.isEmpty()) {
             throw new OrderCreateValidatorException(violations);
@@ -43,12 +44,19 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order getById(UUID id) {
+    public OrderDto getById(UUID id) {
         return orderRepository.getReferenceById(id).toDomain();
     }
 
     @Override
-    public Set<Order> getAll() {
+    public Set<OrderDto> getAll() {
         return orderRepository.findAll().stream().map(OrderEntity::toDomain).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<OrderDto> get(LocalDate startDate, LocalDate endDate) {
+        return orderRepository.findByOrderDateBetween(startDate, endDate).stream()
+                .map(OrderEntity::toDomain)
+                .collect(Collectors.toSet());
     }
 }

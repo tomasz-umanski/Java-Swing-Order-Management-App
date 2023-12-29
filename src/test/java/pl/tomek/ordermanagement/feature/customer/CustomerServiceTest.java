@@ -3,8 +3,7 @@ package pl.tomek.ordermanagement.feature.customer;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import pl.tomek.ordermanagement.annotation.UnitTest;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerService;
@@ -15,8 +14,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@UnitTest
 class CustomerServiceTest {
 
     @Autowired
@@ -43,8 +41,9 @@ class CustomerServiceTest {
     @Test
     void shouldSaveAssetsAndRetrieveAll() {
         CustomerCreate customerCreate = mockCustomerCreate();
+        CustomerCreate secondCustomerCreate = mockCustomerCreate();
         service.create(customerCreate);
-        service.create(customerCreate);
+        service.create(secondCustomerCreate);
 
         Set<Customer> retrievedCustomerSet = service.getAll();
 

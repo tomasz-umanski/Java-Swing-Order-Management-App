@@ -3,21 +3,19 @@ package pl.tomek.ordermanagement.feature.order;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import pl.tomek.ordermanagement.feature.order.api.Order;
+import pl.tomek.ordermanagement.annotation.UnitTest;
+import pl.tomek.ordermanagement.feature.order.api.OrderDto;
 import pl.tomek.ordermanagement.feature.order.api.OrderCreate;
 import pl.tomek.ordermanagement.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.feature.order.exception.OrderCreateValidatorException;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@UnitTest
 class OrderServiceTest {
 
     @Autowired
@@ -26,42 +24,58 @@ class OrderServiceTest {
     @Test
     void shouldSaveAssetAndAssignAnId() {
         OrderCreate orderCreate = mockOrderCreate();
-        Order createdOrder = service.create(orderCreate);
-        assertNotNull(createdOrder.id());
+        OrderDto createdOrderDto = service.create(orderCreate);
+        assertNotNull(createdOrderDto.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
         OrderCreate orderCreate = mockOrderCreate();
-        Order createdOrder = service.create(orderCreate);
-        assertNotNull(createdOrder.id());
+        OrderDto createdOrderDto = service.create(orderCreate);
+        assertNotNull(createdOrderDto.id());
 
-        Order retrievedOrder = service.getById(createdOrder.id());
-        assertNotNull(retrievedOrder);
-        assertEquals(retrievedOrder.customerId(), orderCreate.customerId());
+        OrderDto retrievedOrderDto = service.getById(createdOrderDto.id());
+        assertNotNull(retrievedOrderDto);
+        assertEquals(retrievedOrderDto.customerId(), orderCreate.customerId());
     }
 
     @Test
     void shouldSaveAssetsAndRetrieveAll() {
         OrderCreate orderCreate = mockOrderCreate();
+        OrderCreate secondOrderCreate = mockOrderCreate();
         service.create(orderCreate);
+        service.create(secondOrderCreate);
+
+        Set<OrderDto> retrievedOrderSetDto = service.getAll();
+
+        assertNotNull(retrievedOrderSetDto);
+        assertEquals(retrievedOrderSetDto.size(), 2);
+    }
+
+    @Test
+    void shouldSaveAssetsAndRetrieveOnlyInBetweenDates() {
+        LocalDate startDate = LocalDate.of(2023, 1, 1);
+        LocalDate endDate = LocalDate.of(2023, 12, 31);
+        OrderCreate orderCreate = mockOrderCreateIn2023();
+        OrderCreate secondOrderCreate = mockOrderCreateIn2022();
         service.create(orderCreate);
+        service.create(secondOrderCreate);
 
-        Set<Order> retrievedOrderSet = service.getAll();
+        Set<OrderDto> retrievedOrderSetDto = service.get(startDate, endDate);
 
-        assertNotNull(retrievedOrderSet);
-        assertEquals(retrievedOrderSet.size(), 2);
+        assertNotNull(retrievedOrderSetDto);
+        assertEquals(retrievedOrderSetDto.size(), 1);
     }
 
     @Test
     void shouldSaveAndDeleteAsset() {
         OrderCreate orderCreate = mockOrderCreate();
-        Order createdOrder = service.create(orderCreate);
-        assertNotNull(createdOrder.id());
+        OrderDto createdOrderDto = service.create(orderCreate);
+        assertNotNull(createdOrderDto.id());
 
-        service.delete(createdOrder.id());
+        service.delete(createdOrderDto.id());
 
-        assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrder.id()));
+        assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrderDto.id()));
     }
 
     @Test
@@ -72,7 +86,23 @@ class OrderServiceTest {
 
     private OrderCreate mockOrderCreate() {
         return new OrderCreate(
-                new Date(),
+                LocalDate.now(),
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
+    }
+
+    private OrderCreate mockOrderCreateIn2023() {
+        return new OrderCreate(
+                LocalDate.of(2023, 10, 10),
+                UUID.randomUUID(),
+                UUID.randomUUID()
+        );
+    }
+
+    private OrderCreate mockOrderCreateIn2022() {
+        return new OrderCreate(
+                LocalDate.of(2022, 10, 10),
                 UUID.randomUUID(),
                 UUID.randomUUID()
         );

@@ -13,4 +13,6 @@ public interface ProductService {
     Product getById(UUID id);
 
     Set<Product> getAll();
+
+    Set<Product> get(String namePattern);
 }

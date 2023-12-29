@@ -2,11 +2,11 @@ package pl.tomek.ordermanagement.feature.order.api;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record OrderCreate(@NotNull(message = "OrderDate is mandatory")
-                          Date orderDate,
+                          LocalDate orderDate,
                           @NotNull(message = "CustomerId is mandatory")
                           UUID customerId,
                           @NotNull(message = "ShippingAddressId is mandatory")

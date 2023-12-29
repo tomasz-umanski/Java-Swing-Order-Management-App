@@ -1,9 +1,12 @@
-package pl.tomek.ordermanagement.facade.api;
+package pl.tomek.ordermanagement.facade.customer.api;
 
 import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 
-public record AddressDto(String streetName,
+import java.util.UUID;
+
+public record AddressDto(UUID id,
+                         String streetName,
                          String buildingNumber,
                          String flatNumber,
                          String city,
@@ -13,6 +16,7 @@ public record AddressDto(String streetName,
 
     public static AddressDto of(Address address) {
         return new AddressDto(
+                address.id(),
                 address.streetName(),
                 address.buildingNumber(),
                 address.flatNumber(),

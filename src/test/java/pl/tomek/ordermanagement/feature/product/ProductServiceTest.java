@@ -3,8 +3,9 @@ package pl.tomek.ordermanagement.feature.product;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import pl.tomek.ordermanagement.annotation.UnitTest;
+import pl.tomek.ordermanagement.facade.product.api.ProductDto;
+import pl.tomek.ordermanagement.feature.order.api.OrderDto;
 import pl.tomek.ordermanagement.feature.product.api.Product;
 import pl.tomek.ordermanagement.feature.product.api.ProductCreate;
 import pl.tomek.ordermanagement.feature.product.api.ProductService;
@@ -16,8 +17,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@UnitTest
 class ProductServiceTest {
 
     @Autowired
@@ -70,6 +70,24 @@ class ProductServiceTest {
     }
 
     @Test
+    void shouldSaveAssetsAndRetrieveOnlyMatchingNames() {
+        String namePattern = "book";
+
+        ProductCreate productCreate = mockProductCreate();
+        ProductCreate secondProductCreate = mockProductCreate();
+        ProductCreate thirdProductCreate = mockProductCreateWithName("TestName");
+
+        service.create(productCreate);
+        service.create(secondProductCreate);
+        service.create(thirdProductCreate);
+
+        Set<Product> retrievedProductSet = service.get(namePattern);
+
+        assertNotNull(retrievedProductSet);
+        assertEquals(2, retrievedProductSet.size());
+    }
+
+    @Test
     void shouldThrowValidatorException() {
         ProductCreate productCreate = mockProductCreateWithoutName();
         assertThrows(ProductCreateValidatorException.class, () -> service.create(productCreate));
@@ -78,6 +96,20 @@ class ProductServiceTest {
     private ProductCreate mockProductCreate() {
         return new ProductCreate(
                 "Notebook",
+                "15 inch ultra thin",
+                UUID.randomUUID().toString(),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(123),
+                BigDecimal.valueOf(1),
+                BigDecimal.valueOf(2),
+                BigDecimal.valueOf(3),
+                BigDecimal.valueOf(4)
+        );
+    }
+
+    private ProductCreate mockProductCreateWithName(String name) {
+        return new ProductCreate(
+                name,
                 "15 inch ultra thin",
                 UUID.randomUUID().toString(),
                 BigDecimal.valueOf(100),

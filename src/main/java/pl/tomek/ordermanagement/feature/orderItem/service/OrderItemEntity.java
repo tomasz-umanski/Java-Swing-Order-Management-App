@@ -18,6 +18,8 @@ class OrderItemEntity {
     @NotNull
     private UUID orderId;
     @NotNull
+    private UUID productId;
+    @NotNull
     private BigDecimal quantity;
     private BigDecimal discount;
     @NotNull
@@ -28,6 +30,7 @@ class OrderItemEntity {
     public static OrderItemEntity of(OrderItemCreate orderItemCreate) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();
         orderItemEntity.orderId = orderItemCreate.orderId();
+        orderItemEntity.productId = orderItemCreate.productId();
         orderItemEntity.quantity = orderItemCreate.quantity();
         orderItemEntity.discount = orderItemCreate.discount();
         orderItemEntity.netPrice = orderItemCreate.netPrice();
@@ -39,6 +42,7 @@ class OrderItemEntity {
         return new OrderItem(
                 this.id,
                 this.orderId,
+                this.productId,
                 this.quantity,
                 this.discount,
                 this.netPrice,

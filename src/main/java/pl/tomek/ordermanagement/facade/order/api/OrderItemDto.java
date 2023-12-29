@@ -1,4 +1,4 @@
-package pl.tomek.ordermanagement.facade.api;
+package pl.tomek.ordermanagement.facade.order.api;
 
 import java.math.BigDecimal;
 import java.util.UUID;

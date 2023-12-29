@@ -52,4 +52,11 @@ class ProductServiceImpl implements ProductService {
     public Set<Product> getAll() {
         return productRepository.findAll().stream().map(ProductEntity::toDomain).collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<Product> get(String namePattern) {
+        return productRepository.findByNameContainingIgnoreCase(namePattern).stream()
+                .map(ProductEntity::toDomain)
+                .collect(Collectors.toSet());
+    }
 }

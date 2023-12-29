@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public record OrderItemCreate(@NotNull(message = "OrderId is mandatory")
                               UUID orderId,
+                              @NotNull(message = "ProductId is mandatory")
+                              UUID productId,
                               @NotNull(message = "Quantity is mandatory")
                               BigDecimal quantity,
                               BigDecimal discount,
