@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.tomek.ordermanagement.annotation.UnitTest;
-import pl.tomek.ordermanagement.feature.order.api.OrderDto;
+import pl.tomek.ordermanagement.feature.order.api.Order;
 import pl.tomek.ordermanagement.feature.order.api.OrderCreate;
 import pl.tomek.ordermanagement.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.feature.order.exception.OrderCreateValidatorException;
@@ -24,19 +24,19 @@ class OrderServiceTest {
     @Test
     void shouldSaveAssetAndAssignAnId() {
         OrderCreate orderCreate = mockOrderCreate();
-        OrderDto createdOrderDto = service.create(orderCreate);
-        assertNotNull(createdOrderDto.id());
+        Order createdOrder = service.create(orderCreate);
+        assertNotNull(createdOrder.id());
     }
 
     @Test
     void shouldSaveAssetAndRetrieveBasedOnId() {
         OrderCreate orderCreate = mockOrderCreate();
-        OrderDto createdOrderDto = service.create(orderCreate);
-        assertNotNull(createdOrderDto.id());
+        Order createdOrder = service.create(orderCreate);
+        assertNotNull(createdOrder.id());
 
-        OrderDto retrievedOrderDto = service.getById(createdOrderDto.id());
-        assertNotNull(retrievedOrderDto);
-        assertEquals(retrievedOrderDto.customerId(), orderCreate.customerId());
+        Order retrievedOrder = service.getById(createdOrder.id());
+        assertNotNull(retrievedOrder);
+        assertEquals(retrievedOrder.customerId(), orderCreate.customerId());
     }
 
     @Test
@@ -46,7 +46,7 @@ class OrderServiceTest {
         service.create(orderCreate);
         service.create(secondOrderCreate);
 
-        Set<OrderDto> retrievedOrderSetDto = service.getAll();
+        Set<Order> retrievedOrderSetDto = service.getAll();
 
         assertNotNull(retrievedOrderSetDto);
         assertEquals(retrievedOrderSetDto.size(), 2);
@@ -61,7 +61,7 @@ class OrderServiceTest {
         service.create(orderCreate);
         service.create(secondOrderCreate);
 
-        Set<OrderDto> retrievedOrderSetDto = service.get(startDate, endDate);
+        Set<Order> retrievedOrderSetDto = service.get(startDate, endDate);
 
         assertNotNull(retrievedOrderSetDto);
         assertEquals(retrievedOrderSetDto.size(), 1);
@@ -70,12 +70,12 @@ class OrderServiceTest {
     @Test
     void shouldSaveAndDeleteAsset() {
         OrderCreate orderCreate = mockOrderCreate();
-        OrderDto createdOrderDto = service.create(orderCreate);
-        assertNotNull(createdOrderDto.id());
+        Order createdOrder = service.create(orderCreate);
+        assertNotNull(createdOrder.id());
 
-        service.delete(createdOrderDto.id());
+        service.delete(createdOrder.id());
 
-        assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrderDto.id()));
+        assertThrows(EntityNotFoundException.class, () -> service.getById(createdOrder.id()));
     }
 
     @Test

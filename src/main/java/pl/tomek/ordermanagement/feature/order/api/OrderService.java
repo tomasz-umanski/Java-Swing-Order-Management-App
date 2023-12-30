@@ -7,13 +7,15 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface OrderService {
-    OrderDto create(@Valid OrderCreate orderCreate);
+    Order create(@Valid OrderCreate orderCreate);
 
     void delete(UUID id);
 
-    OrderDto getById(UUID id);
+    Order getById(UUID id);
 
-    Set<OrderDto> getAll();
+    Set<Order> getAll();
 
-    Set<OrderDto> get(LocalDate startDate, LocalDate endDate);
+    Set<Order> get(LocalDate startDate, LocalDate endDate);
+
+    Set<Order> get(UUID customerId);
 }

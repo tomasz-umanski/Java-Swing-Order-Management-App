@@ -4,8 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.tomek.ordermanagement.annotation.UnitTest;
-import pl.tomek.ordermanagement.facade.product.api.ProductDto;
-import pl.tomek.ordermanagement.feature.order.api.OrderDto;
 import pl.tomek.ordermanagement.feature.product.api.Product;
 import pl.tomek.ordermanagement.feature.product.api.ProductCreate;
 import pl.tomek.ordermanagement.feature.product.api.ProductService;

@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @UnitTest
-public class OrderDtoItemServiceTest {
+public class OrderItemServiceTest {
     @Autowired
     private OrderItemService service;
 

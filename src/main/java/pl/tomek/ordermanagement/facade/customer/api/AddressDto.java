@@ -27,6 +27,19 @@ public record AddressDto(UUID id,
         );
     }
 
+    public Address toDomain() {
+        return new Address(
+                this.id,
+                this.streetName,
+                this.buildingNumber,
+                this.flatNumber,
+                this.city,
+                this.zipCode,
+                this.voivodeship,
+                this.country
+        );
+    }
+
     public AddressCreate toCreate() {
         return new AddressCreate(
                 this.streetName,

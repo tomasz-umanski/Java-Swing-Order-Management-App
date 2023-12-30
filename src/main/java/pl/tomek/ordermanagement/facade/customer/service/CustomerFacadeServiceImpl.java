@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.facade.customer.api.CustomerFacadeService;
-import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerService;
 import pl.tomek.ordermanagement.feature.order.api.OrderService;
+import pl.tomek.ordermanagement.feature.orderItem.api.OrderItemService;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -23,28 +23,30 @@ class CustomerFacadeServiceImpl implements CustomerFacadeService {
     private final AddressService addressService;
     private final CustomerService customerService;
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
 
     @Autowired
     public CustomerFacadeServiceImpl(AddressService addressService,
                                      CustomerService customerService,
-                                     OrderService orderService) {
+                                     OrderService orderService, OrderItemService orderItemService) {
         this.addressService = addressService;
         this.customerService = customerService;
         this.orderService = orderService;
+        this.orderItemService = orderItemService;
     }
 
     @Override
     public CustomerDto saveCustomer(CustomerDto customerDto) {
-        Address homeAddress = createAddress(customerDto.homeAddress());
-        Address shippingAddress = createAddress(customerDto.shippingAddress());
-        Customer customer = createCustomer(customerDto, homeAddress, shippingAddress);
-        return CustomerDto.of(customer, homeAddress, shippingAddress);
+        AddressDto homeAddress = createAddress(customerDto.homeAddress());
+        AddressDto shippingAddress = createAddress(customerDto.shippingAddress());
+        return createCustomer(customerDto, homeAddress, shippingAddress);
     }
 
     @Override
     public void deleteCustomer(CustomerDto customerDto) {
         deleteAddress(customerDto.homeAddress().id());
         deleteAddress(customerDto.shippingAddress().id());
+        deleteOrdersForCustomer(customerDto.id());
         customerService.delete(customerDto.id());
     }
 
@@ -52,8 +54,8 @@ class CustomerFacadeServiceImpl implements CustomerFacadeService {
     public Set<CustomerDto> getAllCustomers() {
         return customerService.getAll().stream()
                 .map(customer -> {
-                    Address homeAddress = getAddressById(customer.homeAddressId());
-                    Address shippingAddress = getAddressById(customer.shippingAddressId());
+                    AddressDto homeAddress = getAddressById(customer.homeAddressId());
+                    AddressDto shippingAddress = getAddressById(customer.shippingAddressId());
                     return CustomerDto.of(customer, homeAddress, shippingAddress);
                 })
                 .collect(Collectors.toSet());
@@ -64,15 +66,15 @@ class CustomerFacadeServiceImpl implements CustomerFacadeService {
         return orderService.get(startDate, endDate).stream()
                 .map(order -> {
                     Customer customer = customerService.getById(order.customerId());
-                    Address homeAddress = getAddressById(customer.homeAddressId());
-                    Address shippingAddress = getAddressById(customer.shippingAddressId());
+                    AddressDto homeAddress = getAddressById(customer.homeAddressId());
+                    AddressDto shippingAddress = getAddressById(customer.shippingAddressId());
                     return CustomerDto.of(customer, homeAddress, shippingAddress);
                 })
                 .collect(Collectors.toSet());
     }
 
-    private Address getAddressById(UUID addressId) {
-        return (addressId != null) ? addressService.getById(addressId) : null;
+    private AddressDto getAddressById(UUID addressId) {
+        return (addressId != null) ? AddressDto.of(addressService.getById(addressId)) : null;
     }
 
     private void deleteAddress(UUID addressId) {
@@ -81,17 +83,28 @@ class CustomerFacadeServiceImpl implements CustomerFacadeService {
         }
     }
 
-    private Address createAddress(AddressDto addressDto) {
+    private void deleteOrdersForCustomer(UUID customerId) {
+        orderService.get(customerId).forEach(order -> {
+            deleteOrderItemForOrder(order.id());
+            orderService.delete(order.id());
+        });
+    }
+
+    private void deleteOrderItemForOrder(UUID orderId) {
+        orderItemService.getByOrderId(orderId).forEach(orderItem -> orderItemService.delete(orderItem.id()));
+    }
+
+    private AddressDto createAddress(AddressDto addressDto) {
         if (addressDto != null) {
             AddressCreate addressCreate = addressDto.toCreate();
-            return addressService.create(addressCreate);
+            return AddressDto.of(addressService.create(addressCreate));
         }
         return null;
     }
 
-    private Customer createCustomer(CustomerDto customerDto, Address homeAddress, Address shippingAddress) {
+    private CustomerDto createCustomer(CustomerDto customerDto, AddressDto homeAddress, AddressDto shippingAddress) {
         UUID shippingAddressId = (shippingAddress != null) ? shippingAddress.id() : null;
         CustomerCreate customerCreate = customerDto.toCreate(homeAddress.id(), shippingAddressId);
-        return customerService.create(customerCreate);
+        return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress);
     }
 }

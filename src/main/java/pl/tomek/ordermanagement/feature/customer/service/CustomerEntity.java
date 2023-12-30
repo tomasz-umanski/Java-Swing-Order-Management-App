@@ -4,13 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 
 import java.util.UUID;
 
+import static java.lang.Boolean.FALSE;
+
 @Entity
 @Table(name = "t_customer")
+@SQLDelete(sql = "UPDATE t_customer SET deleted = true WHERE id=?")
+@SQLRestriction("deleted=false")
 class CustomerEntity {
     @Id
     private final UUID id = UUID.randomUUID();
@@ -23,6 +29,8 @@ class CustomerEntity {
     @NotNull
     private UUID homeAddressId;
     private UUID shippingAddressId;
+    @NotNull
+    private boolean deleted = FALSE;
 
     public static CustomerEntity of(CustomerCreate customerCreate) {
         CustomerEntity customerEntity = new CustomerEntity();

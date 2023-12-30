@@ -51,4 +51,18 @@ class OrderItemServiceImpl implements OrderItemService {
     public Set<OrderItem> getAll() {
         return orderItemRepository.findAll().stream().map(OrderItemEntity::toDomain).collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<OrderItem> getByOrderId(UUID orderId) {
+        return orderItemRepository.findByOrderId(orderId).stream()
+                .map(OrderItemEntity::toDomain)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<OrderItem> getByProductId(UUID productId) {
+        return orderItemRepository.findByProductId(productId).stream()
+                .map(OrderItemEntity::toDomain)
+                .collect(Collectors.toSet());
+    }
 }

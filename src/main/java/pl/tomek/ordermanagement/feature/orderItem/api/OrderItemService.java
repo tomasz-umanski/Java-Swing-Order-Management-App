@@ -13,4 +13,9 @@ public interface OrderItemService {
     OrderItem getById(UUID id);
 
     Set<OrderItem> getAll();
+
+    Set<OrderItem> getByOrderId(UUID orderId);
+
+
+    Set<OrderItem> getByProductId(UUID productId);
 }

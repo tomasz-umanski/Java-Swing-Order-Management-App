@@ -1,6 +1,5 @@
 package pl.tomek.ordermanagement.facade.customer.api;
 
-import pl.tomek.ordermanagement.feature.address.api.Address;
 import pl.tomek.ordermanagement.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.feature.customer.api.CustomerCreate;
 
@@ -14,15 +13,15 @@ public record CustomerDto(UUID id,
                           AddressDto homeAddress,
                           AddressDto shippingAddress) {
 
-    public static CustomerDto of(Customer customer, Address homeAddress, Address shippingAddress) {
+    public static CustomerDto of(Customer customer, AddressDto homeAddress, AddressDto shippingAddress) {
         return new CustomerDto(
                 customer.id(),
                 customer.name(),
                 customer.lastName(),
                 customer.companyName(),
                 customer.taxIdNumber(),
-                AddressDto.of(homeAddress),
-                (shippingAddress != null) ? AddressDto.of(shippingAddress) : null
+                homeAddress,
+                shippingAddress
         );
     }
 

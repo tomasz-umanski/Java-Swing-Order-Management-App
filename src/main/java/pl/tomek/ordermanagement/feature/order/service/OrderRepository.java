@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     Set<OrderEntity> findByOrderDateBetween(LocalDate startDate, LocalDate endDate);
+
+    Set<OrderEntity> findByCustomerId(UUID customerId);
 }
