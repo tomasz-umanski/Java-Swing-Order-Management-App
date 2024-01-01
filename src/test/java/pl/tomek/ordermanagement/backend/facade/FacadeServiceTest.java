@@ -2,18 +2,18 @@ package pl.tomek.ordermanagement.backend.facade;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.tomek.ordermanagement.utils.BaseTest;
-import pl.tomek.ordermanagement.utils.UnitTest;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacadeService;
+import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
-import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacadeService;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacade;
 import pl.tomek.ordermanagement.backend.feature.customer.exception.CustomerCreateValidatorException;
 import pl.tomek.ordermanagement.backend.feature.product.exception.ProductCreateValidatorException;
+import pl.tomek.ordermanagement.utils.BaseTest;
+import pl.tomek.ordermanagement.utils.UnitTest;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class FacadeServiceTest extends BaseTest {
 
     @Autowired
-    private CustomerFacadeService customerService;
+    private CustomerFacade customerService;
     @Autowired
-    private ProductFacadeService productService;
+    private ProductFacade productService;
 
     @Test
     void shouldSaveProduct() {
@@ -83,7 +83,7 @@ class FacadeServiceTest extends BaseTest {
         customerService.saveCustomer(customerDto);
         customerService.saveCustomer(customerDtoWithoutShippingAddress);
 
-        Set<CustomerDto> retrievedCustomerSet = customerService.getAllCustomers();
+        List<CustomerDto> retrievedCustomerSet = customerService.getAllCustomers();
 
         assertNotNull(retrievedCustomerSet);
         assertEquals(retrievedCustomerSet.size(), 2);

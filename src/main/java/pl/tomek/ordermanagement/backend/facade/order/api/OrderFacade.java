@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
-public interface OrderFacadeService {
+public interface OrderFacade {
     OrderDto saveOrder(OrderDto orderDto);
     void deleteOrder(OrderDto orderDto);
     Set<OrderDto> getAllOrders();

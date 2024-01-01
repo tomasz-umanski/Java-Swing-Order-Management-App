@@ -3,7 +3,7 @@ package pl.tomek.ordermanagement.backend.facade.product.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
-import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacadeService;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacade;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
@@ -15,13 +15,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-class ProductFacadeServiceImpl implements ProductFacadeService {
+class ProductFacadeImpl implements ProductFacade {
     private final ProductService productService;
     private final OrderItemService orderItemService;
     private final OrderService orderService;
 
     @Autowired
-    public ProductFacadeServiceImpl(ProductService productService, OrderItemService orderItemService, OrderService orderService) {
+    public ProductFacadeImpl(ProductService productService, OrderItemService orderItemService, OrderService orderService) {
         this.productService = productService;
         this.orderItemService = orderItemService;
         this.orderService = orderService;

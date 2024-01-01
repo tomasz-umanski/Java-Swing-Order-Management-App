@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacadeService;
+import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
@@ -14,21 +14,22 @@ import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-class CustomerFacadeServiceImpl implements CustomerFacadeService {
+class CustomerFacadeImpl implements CustomerFacade {
     private final AddressService addressService;
     private final CustomerService customerService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
     @Autowired
-    public CustomerFacadeServiceImpl(AddressService addressService,
-                                     CustomerService customerService,
-                                     OrderService orderService, OrderItemService orderItemService) {
+    public CustomerFacadeImpl(AddressService addressService,
+                              CustomerService customerService,
+                              OrderService orderService, OrderItemService orderItemService) {
         this.addressService = addressService;
         this.customerService = customerService;
         this.orderService = orderService;
@@ -51,14 +52,14 @@ class CustomerFacadeServiceImpl implements CustomerFacadeService {
     }
 
     @Override
-    public Set<CustomerDto> getAllCustomers() {
+    public List<CustomerDto> getAllCustomers() {
         return customerService.getAll().stream()
                 .map(customer -> {
                     AddressDto homeAddress = getAddressById(customer.homeAddressId());
                     AddressDto shippingAddress = getAddressById(customer.shippingAddressId());
                     return CustomerDto.of(customer, homeAddress, shippingAddress);
                 })
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

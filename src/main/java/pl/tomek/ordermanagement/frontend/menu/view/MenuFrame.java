@@ -1,5 +1,6 @@
 package pl.tomek.ordermanagement.frontend.menu.view;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 import pl.tomek.ordermanagement.frontend.commons.Borders;
 
@@ -12,7 +13,8 @@ public class MenuFrame extends JFrame {
     private JButton productsManagementButton;
     private JButton ordersManagementButton;
 
-    public MenuFrame() {
+    @PostConstruct
+    private void prepare() {
         setFrameUp();
         initComponents();
         pack();

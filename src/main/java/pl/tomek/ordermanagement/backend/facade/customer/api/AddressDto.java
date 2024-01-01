@@ -14,6 +14,23 @@ public record AddressDto(UUID id,
                          String voivodeship,
                          String country) {
 
+    @Override
+    public String toString() {
+        StringBuilder addressString = new StringBuilder();
+
+        addressString.append(country).append(", ");
+        addressString.append(voivodeship).append(", ");
+        addressString.append(city).append(", ");
+        addressString.append(zipCode).append(", ");
+        addressString.append(streetName).append(" ").append(buildingNumber);
+
+        if (flatNumber != null && !flatNumber.isEmpty()) {
+            addressString.append("/").append(flatNumber);
+        }
+
+        return addressString.toString();
+    }
+
     public static AddressDto of(Address address) {
         return new AddressDto(
                 address.id(),

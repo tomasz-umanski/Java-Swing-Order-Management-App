@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderDto;
-import pl.tomek.ordermanagement.backend.facade.order.api.OrderFacadeService;
+import pl.tomek.ordermanagement.backend.facade.order.api.OrderFacade;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderItemDto;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-class OrderFacadeServiceImpl implements OrderFacadeService {
+class OrderFacadeImpl implements OrderFacade {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     private final AddressService addressService;
@@ -32,7 +32,7 @@ class OrderFacadeServiceImpl implements OrderFacadeService {
     private final CustomerService customerService;
 
     @Autowired
-    public OrderFacadeServiceImpl(OrderService orderService, OrderItemService orderItemService, AddressService addressService, ProductService productService, CustomerService customerService) {
+    public OrderFacadeImpl(OrderService orderService, OrderItemService orderItemService, AddressService addressService, ProductService productService, CustomerService customerService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
         this.addressService = addressService;
