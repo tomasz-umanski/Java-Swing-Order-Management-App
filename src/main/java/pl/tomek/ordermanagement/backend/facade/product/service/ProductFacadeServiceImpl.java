@@ -1,9 +1,9 @@
-package pl.tomek.ordermanagement.backend.product.service;
+package pl.tomek.ordermanagement.backend.facade.product.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.tomek.ordermanagement.backend.product.api.ProductDto;
-import pl.tomek.ordermanagement.backend.product.api.ProductFacadeService;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacadeService;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;

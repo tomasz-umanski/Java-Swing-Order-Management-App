@@ -7,7 +7,7 @@ import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderDto;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderFacadeService;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderItemDto;
-import pl.tomek.ordermanagement.backend.product.api.ProductDto;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;

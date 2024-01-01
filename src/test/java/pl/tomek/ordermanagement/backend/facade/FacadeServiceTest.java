@@ -2,12 +2,13 @@ package pl.tomek.ordermanagement.backend.facade;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.tomek.ordermanagement.annotation.UnitTest;
+import pl.tomek.ordermanagement.utils.BaseTest;
+import pl.tomek.ordermanagement.utils.UnitTest;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacadeService;
-import pl.tomek.ordermanagement.backend.product.api.ProductDto;
-import pl.tomek.ordermanagement.backend.product.api.ProductFacadeService;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacadeService;
 import pl.tomek.ordermanagement.backend.feature.customer.exception.CustomerCreateValidatorException;
 import pl.tomek.ordermanagement.backend.feature.product.exception.ProductCreateValidatorException;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @UnitTest
-class FacadeServiceTest {
+class FacadeServiceTest extends BaseTest {
 
     @Autowired
     private CustomerFacadeService customerService;

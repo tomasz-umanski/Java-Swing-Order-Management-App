@@ -3,7 +3,8 @@ package pl.tomek.ordermanagement.backend.feature.orderItem;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.tomek.ordermanagement.annotation.UnitTest;
+import pl.tomek.ordermanagement.utils.BaseTest;
+import pl.tomek.ordermanagement.utils.UnitTest;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemCreate;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @UnitTest
-public class OrderItemServiceTest {
+class OrderItemServiceTest extends BaseTest {
     @Autowired
     private OrderItemService service;
 

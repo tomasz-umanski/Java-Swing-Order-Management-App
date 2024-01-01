@@ -1,6 +1,6 @@
 package pl.tomek.ordermanagement.backend.facade.order.api;
 
-import pl.tomek.ordermanagement.backend.product.api.ProductDto;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemCreate;
 

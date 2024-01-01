@@ -1,4 +1,4 @@
-package pl.tomek.ordermanagement.backend.product.api;
+package pl.tomek.ordermanagement.backend.facade.product.api;
 
 import pl.tomek.ordermanagement.backend.feature.product.api.Product;
 
