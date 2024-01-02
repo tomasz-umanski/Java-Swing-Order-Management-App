@@ -1,17 +1,24 @@
 package pl.tomek.ordermanagement.backend.facade.customer.api;
 
+import jakarta.validation.constraints.NotBlank;
 import pl.tomek.ordermanagement.backend.feature.address.api.Address;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 
 import java.util.UUID;
 
 public record AddressDto(UUID id,
+                         @NotBlank(message = "Street Name is mandatory")
                          String streetName,
+                         @NotBlank(message = "Building Number is mandatory")
                          String buildingNumber,
                          String flatNumber,
+                         @NotBlank(message = "City is mandatory")
                          String city,
+                         @NotBlank(message = "Zip Code is mandatory")
                          String zipCode,
+                         @NotBlank(message = "Voivodeship is mandatory")
                          String voivodeship,
+                         @NotBlank(message = "Country is mandatory")
                          String country) {
 
     @Override

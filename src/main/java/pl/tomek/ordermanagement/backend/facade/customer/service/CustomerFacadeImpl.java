@@ -1,5 +1,6 @@
 package pl.tomek.ordermanagement.backend.facade.customer.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
@@ -37,18 +38,53 @@ class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
+    @Transactional
     public CustomerDto saveCustomer(CustomerDto customerDto) {
         AddressDto homeAddress = createAddress(customerDto.homeAddress());
-        AddressDto shippingAddress = createAddress(customerDto.shippingAddress());
+        AddressDto shippingAddress = !customerDto.homeAddress().equals(customerDto.shippingAddress())
+                ? createAddress(customerDto.shippingAddress())
+                : homeAddress;
         return createCustomer(customerDto, homeAddress, shippingAddress);
     }
 
+    private AddressDto createAddress(AddressDto addressDto) {
+        if (addressDto != null) {
+            AddressCreate addressCreate = addressDto.toCreate();
+            return AddressDto.of(addressService.create(addressCreate));
+        }
+        return null;
+    }
+
+    private CustomerDto createCustomer(CustomerDto customerDto, AddressDto homeAddress, AddressDto shippingAddress) {
+        UUID shippingAddressId = (shippingAddress != null) ? shippingAddress.id() : null;
+        CustomerCreate customerCreate = customerDto.toCreate(homeAddress.id(), shippingAddressId);
+        return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress);
+    }
+
+
     @Override
     public void deleteCustomer(CustomerDto customerDto) {
-        deleteAddress(customerDto.homeAddress().id());
-        deleteAddress(customerDto.shippingAddress().id());
+        deleteAddressIfExists(customerDto.homeAddress());
+        deleteAddressIfExists(customerDto.shippingAddress());
         deleteOrdersForCustomer(customerDto.id());
         customerService.delete(customerDto.id());
+    }
+
+    private void deleteOrdersForCustomer(UUID customerId) {
+        orderService.get(customerId).forEach(order -> {
+            deleteOrderItemForOrder(order.id());
+            orderService.delete(order.id());
+        });
+    }
+
+    private void deleteOrderItemForOrder(UUID orderId) {
+        orderItemService.getByOrderId(orderId).forEach(orderItem -> orderItemService.delete(orderItem.id()));
+    }
+
+    private void deleteAddressIfExists(AddressDto addressDto) {
+        if (addressDto != null) {
+            addressService.delete(addressDto.id());
+        }
     }
 
     @Override
@@ -76,36 +112,5 @@ class CustomerFacadeImpl implements CustomerFacade {
 
     private AddressDto getAddressById(UUID addressId) {
         return (addressId != null) ? AddressDto.of(addressService.getById(addressId)) : null;
-    }
-
-    private void deleteAddress(UUID addressId) {
-        if (addressId != null) {
-            addressService.delete(addressId);
-        }
-    }
-
-    private void deleteOrdersForCustomer(UUID customerId) {
-        orderService.get(customerId).forEach(order -> {
-            deleteOrderItemForOrder(order.id());
-            orderService.delete(order.id());
-        });
-    }
-
-    private void deleteOrderItemForOrder(UUID orderId) {
-        orderItemService.getByOrderId(orderId).forEach(orderItem -> orderItemService.delete(orderItem.id()));
-    }
-
-    private AddressDto createAddress(AddressDto addressDto) {
-        if (addressDto != null) {
-            AddressCreate addressCreate = addressDto.toCreate();
-            return AddressDto.of(addressService.create(addressCreate));
-        }
-        return null;
-    }
-
-    private CustomerDto createCustomer(CustomerDto customerDto, AddressDto homeAddress, AddressDto shippingAddress) {
-        UUID shippingAddressId = (shippingAddress != null) ? shippingAddress.id() : null;
-        CustomerCreate customerCreate = customerDto.toCreate(homeAddress.id(), shippingAddressId);
-        return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress);
     }
 }

@@ -10,9 +10,9 @@ import java.awt.*;
 @Component
 public class CustomerAdditionDialog extends JDialog {
     private final CustomerAdditionFormPanel customerAdditionFormPanel;
-    private final CustomerAdditionButtonPanel customerAdditionButtonPanel;
     private final HomeAddressAdditionFormPanel homeAddressAdditionFormPanel;
     private final ShippingAddressAdditionFormPanel shippingAddressAdditionFormPanel;
+    private final CustomerAdditionButtonPanel customerAdditionButtonPanel;
 
     @Autowired
     public CustomerAdditionDialog(CustomerAdditionFormPanel customerAdditionFormPanel,
@@ -20,9 +20,9 @@ public class CustomerAdditionDialog extends JDialog {
                                   HomeAddressAdditionFormPanel homeAddressAdditionFormPanel,
                                   ShippingAddressAdditionFormPanel shippingAddressAdditionFormPanel) {
         this.customerAdditionFormPanel = customerAdditionFormPanel;
-        this.customerAdditionButtonPanel = customerAdditionButtonPanel;
         this.homeAddressAdditionFormPanel = homeAddressAdditionFormPanel;
         this.shippingAddressAdditionFormPanel = shippingAddressAdditionFormPanel;
+        this.customerAdditionButtonPanel = customerAdditionButtonPanel;
     }
 
     @PostConstruct
@@ -45,5 +45,21 @@ public class CustomerAdditionDialog extends JDialog {
         add(homeAddressAdditionFormPanel, BorderLayout.CENTER);
         add(shippingAddressAdditionFormPanel, BorderLayout.EAST);
         add(customerAdditionButtonPanel, BorderLayout.SOUTH);
+    }
+
+    public CustomerAdditionFormPanel customerAdditionFormPanel() {
+        return customerAdditionFormPanel;
+    }
+
+    public HomeAddressAdditionFormPanel homeAddressAdditionFormPanel() {
+        return homeAddressAdditionFormPanel;
+    }
+
+    public ShippingAddressAdditionFormPanel shippingAddressAdditionFormPanel() {
+        return shippingAddressAdditionFormPanel;
+    }
+
+    public CustomerAdditionButtonPanel customerAdditionButtonPanel() {
+        return customerAdditionButtonPanel;
     }
 }

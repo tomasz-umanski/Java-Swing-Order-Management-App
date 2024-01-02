@@ -7,7 +7,7 @@ import javax.swing.*;
 
 @Component
 public class CustomerAdditionButtonPanel extends JPanel {
-    private JButton nextButton;
+    private JButton saveButton;
     private JButton cancelButton;
 
     @PostConstruct
@@ -16,15 +16,15 @@ public class CustomerAdditionButtonPanel extends JPanel {
     }
 
     private void initComponents() {
-        nextButton = new JButton("Next");
-        add(nextButton);
+        saveButton = new JButton("Save");
+        add(saveButton);
 
         cancelButton = new JButton("Cancel");
         add(cancelButton);
     }
 
-    public JButton nextButton() {
-        return nextButton;
+    public JButton saveButton() {
+        return saveButton;
     }
 
     public JButton cancelButton() {

@@ -2,6 +2,7 @@ package pl.tomek.ordermanagement.frontend.customer.view.modal;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
+import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.frontend.commons.Borders;
 
 import javax.swing.*;
@@ -14,7 +15,6 @@ public class HomeAddressAdditionFormPanel extends JPanel {
     private static final int HORIZONTAL_GAP = -100;
     private static final int VERTICAL_GAP = 20;
     private static final int TEXT_FIELD_COLUMNS = 20;
-
     private JTextField streetNameTextField;
     private JTextField buildingNumberTextField;
     private JTextField flatNumberTextField;
@@ -35,43 +35,64 @@ public class HomeAddressAdditionFormPanel extends JPanel {
     }
 
     private void initComponents() {
-        initAddressComponent();
+        streetNameTextField = createTextField();
+        buildingNumberTextField = createTextField();
+        flatNumberTextField = createTextField();
+        cityTextField = createTextField();
+        zipCodeTextField = createTextField();
+        voivodeshipTextField = createTextField();
+        countryTextField = createTextField();
+
+        add(new JLabel("Street Name"));
+        add(streetNameTextField);
+        add(new JLabel("Building Number"));
+        add(buildingNumberTextField);
+        add(new JLabel("Flat Number"));
+        add(flatNumberTextField);
+        add(new JLabel("City"));
+        add(cityTextField);
+        add(new JLabel("Zip Code"));
+        add(zipCodeTextField);
+        add(new JLabel("Voivodeship"));
+        add(voivodeshipTextField);
+        add(new JLabel("Country"));
+        add(countryTextField);
+        add(new JLabel());
+        add(new JLabel());
+        add(new JLabel());
+        add(new JLabel());
+        add(new JLabel());
+        add(new JLabel());
     }
 
-    private void initAddressComponent() {
-        final JLabel streetNameLabel = new JLabel("Street Name");
-        final JLabel buildingNumberLabel = new JLabel("Building Number");
-        final JLabel flatNumberLabel = new JLabel("Flat Number");
-        final JLabel cityLabel = new JLabel("City");
-        final JLabel zipCodeLabel = new JLabel("Zip Code");
-        final JLabel voivodeshipLabel = new JLabel("Voivodeship");
-        final JLabel countryLabel = new JLabel("Country");
+    private JTextField createTextField() {
+        return new JTextField(TEXT_FIELD_COLUMNS);
+    }
 
-        streetNameTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        buildingNumberTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        flatNumberTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        cityTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        zipCodeTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        voivodeshipTextField = new JTextField(TEXT_FIELD_COLUMNS);
-        countryTextField = new JTextField(TEXT_FIELD_COLUMNS);
+    public void clearForm() {
+        clearTextField(streetNameTextField);
+        clearTextField(buildingNumberTextField);
+        clearTextField(flatNumberTextField);
+        clearTextField(cityTextField);
+        clearTextField(zipCodeTextField);
+        clearTextField(voivodeshipTextField);
+        clearTextField(countryTextField);
+    }
 
-        add(new JLabel("Home Address:"));
-        add(new JLabel());
-        add(new JLabel());
-        add(new JLabel());
-        add(streetNameLabel);
-        add(streetNameTextField);
-        add(buildingNumberLabel);
-        add(buildingNumberTextField);
-        add(flatNumberLabel);
-        add(flatNumberTextField);
-        add(cityLabel);
-        add(cityTextField);
-        add(zipCodeLabel);
-        add(zipCodeTextField);
-        add(voivodeshipLabel);
-        add(voivodeshipTextField);
-        add(countryLabel);
-        add(countryTextField);
+    private void clearTextField(JTextField textField) {
+        textField.setText("");
+    }
+
+    public AddressDto toDto() {
+        return new AddressDto(
+                null,
+                streetNameTextField.getText(),
+                buildingNumberTextField.getText(),
+                flatNumberTextField.getText(),
+                cityTextField.getText(),
+                zipCodeTextField.getText(),
+                voivodeshipTextField.getText(),
+                countryTextField.getText()
+        );
     }
 }

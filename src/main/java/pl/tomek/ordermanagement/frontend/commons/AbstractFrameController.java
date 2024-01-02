@@ -11,4 +11,7 @@ public abstract class AbstractFrameController {
         button.addActionListener(listener);
     }
 
+    protected void registerAction(JCheckBox button, ActionListener listener) {
+        button.addActionListener(listener);
+    }
 }
