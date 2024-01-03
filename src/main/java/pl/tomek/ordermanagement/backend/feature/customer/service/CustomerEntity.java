@@ -15,8 +15,8 @@ import static java.lang.Boolean.FALSE;
 
 @Entity
 @Table(name = "t_customer")
-@SQLDelete(sql = "UPDATE t_customer SET deleted = true WHERE id=?")
-@SQLRestriction("deleted=false")
+@SQLDelete(sql = "UPDATE t_customer SET archived = true WHERE id=?")
+@SQLRestriction("archived=false")
 class CustomerEntity {
     @Id
     private final UUID id = UUID.randomUUID();
@@ -30,7 +30,7 @@ class CustomerEntity {
     private UUID homeAddressId;
     private UUID shippingAddressId;
     @NotNull
-    private boolean deleted = FALSE;
+    private boolean archived = FALSE;
 
     public static CustomerEntity of(CustomerCreate customerCreate) {
         CustomerEntity customerEntity = new CustomerEntity();

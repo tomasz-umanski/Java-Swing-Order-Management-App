@@ -11,6 +11,10 @@ public record CustomerDto(UUID id,
                           String taxIdNumber,
                           AddressDto homeAddress,
                           AddressDto shippingAddress) {
+    @Override
+    public String toString() {
+        return name + " " + lastName;
+    }
 
     public static CustomerDto of(Customer customer, AddressDto homeAddress, AddressDto shippingAddress) {
         return new CustomerDto(

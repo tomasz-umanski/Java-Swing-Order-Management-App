@@ -1,8 +1,8 @@
-package pl.tomek.ordermanagement.frontend.customer.view;
+package pl.tomek.ordermanagement.frontend.order.view;
 
 import org.springframework.stereotype.Component;
 import pl.tomek.ordermanagement.frontend.commons.DefaultButtonPanel;
 
 @Component
-public class CustomerButtonPanel extends DefaultButtonPanel {
+public class OrderButtonPanel extends DefaultButtonPanel {
 }

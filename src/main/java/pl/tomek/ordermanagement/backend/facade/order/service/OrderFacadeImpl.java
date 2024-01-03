@@ -19,6 +19,7 @@ import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.feature.product.api.ProductService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,10 +56,10 @@ class OrderFacadeImpl implements OrderFacade {
     }
 
     @Override
-    public Set<OrderDto> getAllOrders() {
+    public List<OrderDto> getAllOrders() {
         return orderService.getAll().stream()
                 .map(this::getOrderDtoDetails)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

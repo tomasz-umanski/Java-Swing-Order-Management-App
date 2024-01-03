@@ -41,6 +41,18 @@ public class ProductFrameController extends AbstractFrameController {
         prepareListeners();
     }
 
+    @Override
+    public void initAndOpenFrame() {
+        loadEntities();
+        productFrame.setVisible(true);
+    }
+
+    private void loadEntities() {
+        List<ProductDto> entities = productFacade.getAllProducts();
+        productTableModel.clear();
+        productTableModel.addEntities(entities);
+    }
+
     private void prepareListeners() {
         pl.tomek.ordermanagement.frontend.product.view.ProductButtonPanel productButtonPanel = productFrame.productButtonPanel();
         ProductModalButtonPanel productAdditionButtonPanel = productDialog.productAdditionButtonPanel();
@@ -111,17 +123,5 @@ public class ProductFrameController extends AbstractFrameController {
             productDialog.prepareDetailsDialog(productDto);
             productDialog.setVisible(true);
         }
-    }
-
-    @Override
-    public void initAndOpenFrame() {
-        loadEntities();
-        productFrame.setVisible(true);
-    }
-
-    private void loadEntities() {
-        List<ProductDto> entities = productFacade.getAllProducts();
-        productTableModel.clear();
-        productTableModel.addEntities(entities);
     }
 }

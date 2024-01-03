@@ -15,8 +15,8 @@ import static java.lang.Boolean.FALSE;
 
 @Entity
 @Table(name = "t_address")
-@SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id=?")
-@SQLRestriction("deleted=false")
+@SQLDelete(sql = "UPDATE t_address SET archived = true WHERE id=?")
+@SQLRestriction("archived=false")
 class AddressEntity {
     @Id
     private final UUID id = UUID.randomUUID();
@@ -34,7 +34,7 @@ class AddressEntity {
     @NotNull
     private String country;
     @NotNull
-    private boolean deleted = FALSE;
+    private boolean archived = FALSE;
 
     public static AddressEntity of(AddressCreate addressCreate) {
         AddressEntity addressEntity = new AddressEntity();

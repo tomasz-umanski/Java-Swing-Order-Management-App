@@ -16,8 +16,8 @@ import static java.lang.Boolean.FALSE;
 
 @Entity
 @Table(name = "t_order_item")
-@SQLDelete(sql = "UPDATE t_order_item SET deleted = true WHERE id=?")
-@SQLRestriction("deleted=false")
+@SQLDelete(sql = "UPDATE t_order_item SET archived = true WHERE id=?")
+@SQLRestriction("archived=false")
 class OrderItemEntity {
     @Id
     private final UUID id = UUID.randomUUID();
@@ -33,7 +33,7 @@ class OrderItemEntity {
     @NotNull
     private BigDecimal grossPrice;
     @NotNull
-    private boolean deleted = FALSE;
+    private boolean archived = FALSE;
 
     public static OrderItemEntity of(OrderItemCreate orderItemCreate) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();
