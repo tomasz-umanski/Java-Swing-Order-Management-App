@@ -2,13 +2,13 @@ package pl.tomek.ordermanagement.backend.facade;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
+import pl.tomek.ordermanagement.backend.facade.customer.api.AddressCreateDto;
+import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerCreateDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
+import pl.tomek.ordermanagement.backend.facade.product.api.ProductCreateDto;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductFacade;
-import pl.tomek.ordermanagement.backend.feature.customer.exception.CustomerCreateValidatorException;
-import pl.tomek.ordermanagement.backend.feature.product.exception.ProductCreateValidatorException;
 import pl.tomek.ordermanagement.utils.BaseTest;
 import pl.tomek.ordermanagement.utils.UnitTest;
 
@@ -28,71 +28,59 @@ class FacadeServiceTest extends BaseTest {
 
     @Test
     void shouldSaveProduct() {
-        ProductDto productDto = mockProductDto();
-        ProductDto createdProductDto = productService.saveProduct(productDto);
+        ProductCreateDto productCreateDto = mockProductCreateDto();
+        ProductDto createdProductDto = productService.saveProduct(productCreateDto);
         assertNotNull(createdProductDto.id());
-        assertEquals(productDto.name(), createdProductDto.name());
+        assertEquals(productCreateDto.name(), createdProductDto.name());
     }
 
     @Test
     void shouldSaveAndDeleteProduct() {
-        ProductDto productDto = mockProductDto();
-        ProductDto createdProductDto = productService.saveProduct(productDto);
+        ProductCreateDto productCreateDto = mockProductCreateDto();
+        ProductDto createdProductDto = productService.saveProduct(productCreateDto);
         assertNotNull(createdProductDto.id());
         productService.deleteProduct(createdProductDto.id());
     }
 
     @Test
-    void shouldThrowValidatorExceptionOnSaveProduct() {
-        ProductDto productDto = mockProductDtoWithoutName();
-        assertThrows(ProductCreateValidatorException.class, () -> productService.saveProduct(productDto));
-    }
-
-    @Test
     void shouldSaveCustomer() {
-        CustomerDto customerDto = mockCustomerDto();
-        CustomerDto createdCustomerDto = customerService.saveCustomer(customerDto);
+        CustomerCreateDto customerCreateDto = mockCustomerCreateDto();
+        CustomerDto createdCustomerDto = customerService.saveCustomer(customerCreateDto);
         assertNotNull(createdCustomerDto.id());
         assertNotNull(createdCustomerDto.homeAddress().id());
         assertNotNull(createdCustomerDto.shippingAddress().id());
-        assertEquals(customerDto.name(), createdCustomerDto.name());
+        assertEquals(customerCreateDto.name(), createdCustomerDto.name());
     }
 
     @Test
     void shouldSaveCustomerWithoutShippingAddress() {
-        CustomerDto customerDto = mockCustomerDtoWithoutShippingAddress();
-        CustomerDto createdCustomerDto = customerService.saveCustomer(customerDto);
+        CustomerCreateDto customerCreateDto = mockCustomerCreateDtoWithoutShippingAddress();
+        CustomerDto createdCustomerDto = customerService.saveCustomer(customerCreateDto);
         assertNotNull(createdCustomerDto.id());
         assertNotNull(createdCustomerDto.homeAddress().id());
         assertNull(createdCustomerDto.shippingAddress());
-        assertEquals(customerDto.name(), createdCustomerDto.name());
+        assertEquals(customerCreateDto.name(), createdCustomerDto.name());
     }
 
     @Test
     void shouldSaveAndDeleteCustomer() {
-        CustomerDto customerDto = mockCustomerDto();
-        CustomerDto createdCustomerDto = customerService.saveCustomer(customerDto);
+        CustomerCreateDto customerCreateDto = mockCustomerCreateDto();
+        CustomerDto createdCustomerDto = customerService.saveCustomer(customerCreateDto);
         assertNotNull(createdCustomerDto.id());
         customerService.deleteCustomer(createdCustomerDto);
     }
 
     @Test
     void shouldSaveCustomersAndRetrieveAll() {
-        CustomerDto customerDto = mockCustomerDto();
-        CustomerDto customerDtoWithoutShippingAddress = mockCustomerDtoWithoutShippingAddress();
-        customerService.saveCustomer(customerDto);
-        customerService.saveCustomer(customerDtoWithoutShippingAddress);
+        CustomerCreateDto customerCreateDto = mockCustomerCreateDto();
+        CustomerCreateDto customerCreateDtoWithoutShippingAddress = mockCustomerCreateDtoWithoutShippingAddress();
+        customerService.saveCustomer(customerCreateDto);
+        customerService.saveCustomer(customerCreateDtoWithoutShippingAddress);
 
         List<CustomerDto> retrievedCustomerSet = customerService.getAllCustomers();
 
         assertNotNull(retrievedCustomerSet);
         assertEquals(retrievedCustomerSet.size(), 2);
-    }
-
-    @Test
-    void shouldThrowValidatorExceptionOnSaveCustomer() {
-        CustomerDto customerDto = mockCustomerDtoWithoutName();
-        assertThrows(CustomerCreateValidatorException.class, () -> customerService.saveCustomer(customerDto));
     }
 
 //    @Test
@@ -139,9 +127,8 @@ class FacadeServiceTest extends BaseTest {
 //        return new HashSet<>();
 //    }
 
-    private ProductDto mockProductDto() {
-        return new ProductDto(
-                null,
+    private ProductCreateDto mockProductCreateDto() {
+        return new ProductCreateDto(
                 "Notebook",
                 "15 inch ultra thin",
                 UUID.randomUUID().toString(),
@@ -169,45 +156,30 @@ class FacadeServiceTest extends BaseTest {
         );
     }
 
-    private CustomerDto mockCustomerDto() {
-        return new CustomerDto(
-                null,
+    private CustomerCreateDto mockCustomerCreateDto() {
+        return new CustomerCreateDto(
                 "Jan",
                 "Testowy",
                 "Firma",
                 "1234563218",
-                mockAddressDto(),
-                mockAddressDto()
+                mockAddressCreateDto(),
+                mockAddressCreateDto()
         );
     }
 
-    private CustomerDto mockCustomerDtoWithoutName() {
-        return new CustomerDto(
-                null,
-                null,
-                "Testowy",
-                "Firma",
-                "1234563218",
-                mockAddressDto(),
-                mockAddressDto()
-        );
-    }
-
-    private CustomerDto mockCustomerDtoWithoutShippingAddress() {
-        return new CustomerDto(
-                null,
+    private CustomerCreateDto mockCustomerCreateDtoWithoutShippingAddress() {
+        return new CustomerCreateDto(
                 "Jan",
                 "Testowy",
                 "Firma",
                 "1234563218",
-                mockAddressDto(),
+                mockAddressCreateDto(),
                 null
         );
     }
 
-    private AddressDto mockAddressDto() {
-        return new AddressDto(
-                null,
+    private AddressCreateDto mockAddressCreateDto() {
+        return new AddressCreateDto(
                 "a",
                 "b",
                 "c",

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface CustomerFacade {
-    CustomerDto saveCustomer(CustomerDto customerDto);
+    CustomerDto saveCustomer(CustomerCreateDto customerCreateDto);
 
     void deleteCustomer(CustomerDto customerDto);
 

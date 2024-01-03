@@ -1,6 +1,6 @@
 package pl.tomek.ordermanagement.backend.feature.product.exception;
 
-import pl.tomek.ordermanagement.backend.feature.validation.ObjectsValidatorException;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidatorException;
 
 import java.util.Set;
 

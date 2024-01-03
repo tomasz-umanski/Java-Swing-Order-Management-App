@@ -4,10 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
-import pl.tomek.ordermanagement.backend.feature.orderItem.exception.OrderItemCreateValidatorException;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemCreate;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
-import pl.tomek.ordermanagement.backend.feature.validation.ObjectsValidator;
+import pl.tomek.ordermanagement.backend.feature.orderItem.exception.OrderItemCreateValidatorException;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.util.Set;
 import java.util.UUID;

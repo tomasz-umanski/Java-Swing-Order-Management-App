@@ -1,4 +1,4 @@
-package pl.tomek.ordermanagement.frontend.customer.view;
+package pl.tomek.ordermanagement.frontend.product.view;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 
 @Component
-public class CustomerButtonPanel extends JPanel {
+public class ProductButtonPanel extends JPanel {
     private JButton addButton;
     private JButton deleteButton;
     private JButton detailsButton;
@@ -17,13 +17,13 @@ public class CustomerButtonPanel extends JPanel {
     }
 
     private void initComponents() {
-        addButton = new JButton("Add Customer");
+        addButton = new JButton("Add Product");
         add(addButton);
 
-        deleteButton = new JButton("Delete Customer");
+        deleteButton = new JButton("Delete Product");
         add(deleteButton);
 
-        detailsButton = new JButton("Show Customer Details");
+        detailsButton = new JButton("Show Product Details");
         add(detailsButton);
     }
 

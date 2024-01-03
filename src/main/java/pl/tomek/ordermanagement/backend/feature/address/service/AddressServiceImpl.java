@@ -7,7 +7,7 @@ import pl.tomek.ordermanagement.backend.feature.address.api.Address;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.address.exception.AddressCreateValidatorException;
-import pl.tomek.ordermanagement.backend.feature.validation.ObjectsValidator;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.util.Set;
 import java.util.UUID;

@@ -42,4 +42,8 @@ public class MenuFrame extends JFrame {
     public JButton customersManagementButton() {
         return customersManagementButton;
     }
+
+    public JButton productsManagementButton() {
+        return productsManagementButton;
+    }
 }

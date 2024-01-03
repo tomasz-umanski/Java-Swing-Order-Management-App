@@ -1,16 +1,14 @@
 package pl.tomek.ordermanagement.backend.facade.product.api;
 
-import pl.tomek.ordermanagement.backend.feature.product.api.Product;
-
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 public interface ProductFacade {
-    ProductDto saveProduct(ProductDto productDto);
+    ProductDto saveProduct(ProductCreateDto productCreateDto);
 
     void deleteProduct(UUID id);
 
-    Set<Product> getAllProducts();
+    List<ProductDto> getAllProducts();
 
-    Set<Product> getProductsContainingNamePattern(String nameLike);
+    List<ProductDto> getProductsContainingNamePattern(String nameLike);
 }

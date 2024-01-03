@@ -3,9 +3,8 @@ package pl.tomek.ordermanagement.backend.facade.customer.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
+import pl.tomek.ordermanagement.backend.facade.customer.api.*;
+import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreateDtoValidatorException;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
@@ -13,6 +12,7 @@ import pl.tomek.ordermanagement.backend.feature.customer.api.CustomerCreate;
 import pl.tomek.ordermanagement.backend.feature.customer.api.CustomerService;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,38 +26,45 @@ class CustomerFacadeImpl implements CustomerFacade {
     private final CustomerService customerService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
+    private final ObjectsValidator<CustomerCreateDto> validator;
 
     @Autowired
     public CustomerFacadeImpl(AddressService addressService,
                               CustomerService customerService,
-                              OrderService orderService, OrderItemService orderItemService) {
+                              OrderService orderService, OrderItemService orderItemService,
+                              ObjectsValidator<CustomerCreateDto> validator) {
         this.addressService = addressService;
         this.customerService = customerService;
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.validator = validator;
     }
 
     @Override
     @Transactional
-    public CustomerDto saveCustomer(CustomerDto customerDto) {
-        AddressDto homeAddress = createAddress(customerDto.homeAddress());
-        AddressDto shippingAddress = !customerDto.homeAddress().equals(customerDto.shippingAddress())
-                ? createAddress(customerDto.shippingAddress())
+    public CustomerDto saveCustomer(CustomerCreateDto customerCreateDto) {
+        Set<String> violations = validator.validate(customerCreateDto);
+        if (!violations.isEmpty()) {
+            throw new CustomerCreateDtoValidatorException(violations);
+        }
+        AddressDto homeAddress = createAddress(customerCreateDto.homeAddress());
+        AddressDto shippingAddress = !customerCreateDto.homeAddress().equals(customerCreateDto.shippingAddress())
+                ? createAddress(customerCreateDto.shippingAddress())
                 : homeAddress;
-        return createCustomer(customerDto, homeAddress, shippingAddress);
+        return createCustomer(customerCreateDto, homeAddress, shippingAddress);
     }
 
-    private AddressDto createAddress(AddressDto addressDto) {
-        if (addressDto != null) {
-            AddressCreate addressCreate = addressDto.toCreate();
+    private AddressDto createAddress(AddressCreateDto addressCreateDto) {
+        if (addressCreateDto != null) {
+            AddressCreate addressCreate = addressCreateDto.toDomainCreate();
             return AddressDto.of(addressService.create(addressCreate));
         }
         return null;
     }
 
-    private CustomerDto createCustomer(CustomerDto customerDto, AddressDto homeAddress, AddressDto shippingAddress) {
+    private CustomerDto createCustomer(CustomerCreateDto customerCreateDto, AddressDto homeAddress, AddressDto shippingAddress) {
         UUID shippingAddressId = (shippingAddress != null) ? shippingAddress.id() : null;
-        CustomerCreate customerCreate = customerDto.toCreate(homeAddress.id(), shippingAddressId);
+        CustomerCreate customerCreate = customerCreateDto.toDomainCreate(homeAddress.id(), shippingAddressId);
         return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress);
     }
 

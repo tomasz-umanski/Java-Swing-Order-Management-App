@@ -7,7 +7,7 @@ import pl.tomek.ordermanagement.backend.feature.product.api.Product;
 import pl.tomek.ordermanagement.backend.feature.product.api.ProductCreate;
 import pl.tomek.ordermanagement.backend.feature.product.api.ProductService;
 import pl.tomek.ordermanagement.backend.feature.product.exception.ProductCreateValidatorException;
-import pl.tomek.ordermanagement.backend.feature.validation.ObjectsValidator;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.util.Set;
 import java.util.UUID;

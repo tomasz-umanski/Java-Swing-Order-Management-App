@@ -72,3 +72,63 @@ VALUES (
     '4d3c2b1a-9a8b-7c6d-5e4f-3a2b1c9a8b7c',
     FALSE
 );
+
+INSERT INTO t_product (id, name, description, SKU, estimated_net_unit_price, estimated_gross_unit_price, length, height, width, weight, deleted)
+VALUES (
+    'b5205b4f-22fd-4a95-b8c3-d8c82f524545',
+    'Product 1',
+    'Description for Product 1',
+    'SKU001',
+    50.00,
+    60.00,
+    10.0,
+    5.0,
+    8.0,
+    2.0,
+    FALSE
+);
+
+INSERT INTO t_product (id, name, description, SKU, estimated_net_unit_price, estimated_gross_unit_price, length, height, width, weight, deleted)
+VALUES (
+    'bbf9a6e4-35e1-4f6e-b18b-5c1d319a7981',
+    'Product 2',
+    'Description for Product 2',
+    'SKU002',
+    40.00,
+    48.00,
+    12.0,
+    6.0,
+    9.0,
+    3.0,
+    FALSE
+);
+
+INSERT INTO t_product (id, name, description, SKU, estimated_net_unit_price, estimated_gross_unit_price, length, height, width, weight, deleted)
+VALUES (
+    'e8d0b44b-3e22-4fa9-abc1-6c8e1fb1b1dc',
+    'Product 3',
+    'Description for Product 3',
+    'SKU003',
+    30.00,
+    36.00,
+    14.0,
+    7.0,
+    10.0,
+    4.0,
+    FALSE
+);
+
+INSERT INTO t_product (id, name, description, SKU, estimated_net_unit_price, estimated_gross_unit_price, length, height, width, weight, deleted)
+VALUES (
+    '4d3c2b1a-9a8b-7c6d-5e4f-3a2b1c9a8b7c',
+    'Product 5',
+    'Description for Product 5',
+    'SKU005',
+    20.00,
+    24.00,
+    18.0,
+    9.0,
+    12.0,
+    6.0,
+    FALSE
+);

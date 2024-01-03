@@ -3,6 +3,7 @@ package pl.tomek.ordermanagement.frontend.customer.view.modal;
 import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
+import pl.tomek.ordermanagement.backend.facade.customer.api.AddressCreateDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.frontend.commons.Borders;
 
@@ -10,10 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 
 @Component
-public class ShippingAddressAdditionFormPanel extends JPanel {
+public class ShippingAddressFormPanel extends JPanel {
     private static final int LAYOUT_ROWS = 10;
     private static final int LAYOUT_COLS = 2;
-    private static final int HORIZONTAL_GAP = -100;
+    private static final int HORIZONTAL_GAP = 0;
     private static final int VERTICAL_GAP = 20;
     private static final int TEXT_FIELD_COLUMNS = 20;
 
@@ -36,7 +37,7 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
     private JTextField countryTextField;
 
     @PostConstruct
-    private void preparePanel() {
+    private void prepare() {
         setPanelUp();
         initComponents();
     }
@@ -47,10 +48,6 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
     }
 
     private void initComponents() {
-        initAddressComponent();
-    }
-
-    private void initAddressComponent() {
         addShippingAddressCheckbox = new JCheckBox("Add Shipping Address");
         addShippingAddressCheckbox.addActionListener(e -> onChangedShippingAddressCheckbox());
 
@@ -65,12 +62,16 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
         voivodeshipTextField = new JTextField(TEXT_FIELD_COLUMNS);
         countryTextField = new JTextField(TEXT_FIELD_COLUMNS);
 
+        addFields(true);
+    }
+
+    public void addFields(boolean withCheckboxes) {
         add(new JLabel("Shipping Address:"));
         add(new JLabel());
-        add(addShippingAddressCheckbox);
-        add(new JLabel());
-        add(sameAsHomeAddressCheckbox);
-        add(new JLabel());
+        if (withCheckboxes) {
+            add(addShippingAddressCheckbox);
+            add(sameAsHomeAddressCheckbox);
+        }
         add(streetNameLabel);
         add(streetNameTextField);
         add(buildingNumberLabel);
@@ -85,9 +86,36 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
         add(voivodeshipTextField);
         add(countryLabel);
         add(countryTextField);
+    }
 
-        sameAsHomeAddressCheckbox().setVisible(false);
+    public void prepareAddPanel() {
+        removeAll();
+        addFields(true);
+        addShippingAddressCheckbox.setVisible(true);
+        sameAsHomeAddressCheckbox.setVisible(false);
+        clearForm(true);
         setFieldsVisibility(false, false);
+    }
+
+    public void prepareDetailsPanel(AddressDto addressDto) {
+        removeAll();
+        addFields(false);
+        addShippingAddressCheckbox.setVisible(false);
+        sameAsHomeAddressCheckbox.setVisible(false);
+        setFieldsVisibility(true, false);
+        if (addressDto != null) {
+            setData(addressDto);
+        }
+    }
+
+    private void setData(AddressDto addressDto) {
+        streetNameTextField.setText(addressDto.streetName());
+        buildingNumberTextField.setText(addressDto.buildingNumber());
+        flatNumberTextField.setText(addressDto.flatNumber());
+        cityTextField.setText(addressDto.city());
+        zipCodeTextField.setText(addressDto.zipCode());
+        voivodeshipTextField.setText(addressDto.voivodeship());
+        countryTextField.setText(addressDto.country());
     }
 
     private void onChangedShippingAddressCheckbox() {
@@ -126,43 +154,36 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
 
     public void setFieldsVisibility(boolean visible, boolean enabled) {
         streetNameLabel.setVisible(visible);
-        streetNameLabel.setEnabled(enabled);
 
         streetNameTextField.setVisible(visible);
         streetNameTextField.setEnabled(enabled);
 
         buildingNumberLabel.setVisible(visible);
-        buildingNumberLabel.setEnabled(enabled);
 
         buildingNumberTextField.setVisible(visible);
         buildingNumberTextField.setEnabled(enabled);
 
         flatNumberLabel.setVisible(visible);
-        flatNumberLabel.setEnabled(enabled);
 
         flatNumberTextField.setVisible(visible);
         flatNumberTextField.setEnabled(enabled);
 
         cityLabel.setVisible(visible);
-        cityLabel.setEnabled(enabled);
 
         cityTextField.setVisible(visible);
         cityTextField.setEnabled(enabled);
 
         zipCodeLabel.setVisible(visible);
-        zipCodeLabel.setEnabled(enabled);
 
         zipCodeTextField.setVisible(visible);
         zipCodeTextField.setEnabled(enabled);
 
         voivodeshipLabel.setVisible(visible);
-        voivodeshipLabel.setEnabled(enabled);
 
         voivodeshipTextField.setVisible(visible);
         voivodeshipTextField.setEnabled(enabled);
 
         countryLabel.setVisible(visible);
-        countryLabel.setEnabled(enabled);
 
         countryTextField.setVisible(visible);
         countryTextField.setEnabled(enabled);
@@ -176,9 +197,8 @@ public class ShippingAddressAdditionFormPanel extends JPanel {
         return sameAsHomeAddressCheckbox;
     }
 
-    public AddressDto toDto() {
-        return new AddressDto(
-                null,
+    public AddressCreateDto toCreateDto() {
+        return new AddressCreateDto(
                 streetNameTextField.getText(),
                 buildingNumberTextField.getText(),
                 flatNumberTextField.getText(),

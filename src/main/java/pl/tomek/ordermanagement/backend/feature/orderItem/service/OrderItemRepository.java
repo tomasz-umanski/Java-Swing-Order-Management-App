@@ -9,5 +9,6 @@ import java.util.UUID;
 @Repository
 interface OrderItemRepository extends JpaRepository<OrderItemEntity, UUID> {
     Set<OrderItemEntity> findByOrderId(UUID customerId);
+
     Set<OrderItemEntity> findByProductId(UUID productId);
 }

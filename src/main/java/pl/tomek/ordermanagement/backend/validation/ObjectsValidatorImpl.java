@@ -1,4 +1,4 @@
-package pl.tomek.ordermanagement.backend.feature.validation;
+package pl.tomek.ordermanagement.backend.validation;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

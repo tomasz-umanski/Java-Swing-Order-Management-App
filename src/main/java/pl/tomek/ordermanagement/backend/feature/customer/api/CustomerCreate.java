@@ -14,4 +14,5 @@ public record CustomerCreate(@NotBlank(message = "Name is mandatory")
                              @NotNull(message = "HomeAddressId is mandatory")
                              UUID homeAddressId,
                              UUID shippingAddressId) {
+
 }

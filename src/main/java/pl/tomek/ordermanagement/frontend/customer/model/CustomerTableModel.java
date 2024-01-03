@@ -18,11 +18,11 @@ public class CustomerTableModel extends DefaultTableModel<CustomerDto> {
     public String[] getColumnLabels() {
         return new String[]{
                 "Name",
-                "Last name",
+                "Last Name",
                 "Company Name",
-                "Tax id number",
-                "Home address",
-                "Shipping address"
+                "Tax Id Number",
+                "Home Address",
+                "Shipping Address"
         };
     }
 

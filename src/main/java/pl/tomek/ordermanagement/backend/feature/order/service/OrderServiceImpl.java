@@ -7,7 +7,7 @@ import pl.tomek.ordermanagement.backend.feature.order.api.Order;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderCreate;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.order.exception.OrderCreateValidatorException;
-import pl.tomek.ordermanagement.backend.feature.validation.ObjectsValidator;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.time.LocalDate;
 import java.util.Set;
