@@ -24,11 +24,11 @@ public class CustomerSearchQueryPanel extends JPanel {
     private static final int VERTICAL_GAP = 20;
     private static final int TEXT_FIELD_COLUMNS = 20;
     private final JLabel fromDateLabel = new JLabel("Order Date From");
-    private JDateChooser fromDateChooser = new JDateChooser();
+    private final JDateChooser fromDateChooser = new JDateChooser();
     private final JLabel toDateLabel = new JLabel("Order Date To");
-    private JDateChooser toDateChooser = new JDateChooser();
+    private final JDateChooser toDateChooser = new JDateChooser();
     private final JLabel fromValuePriceLabel = new JLabel("Order Min Price");
-    private JTextField fromValueTextField = new JTextField(TEXT_FIELD_COLUMNS);
+    private final JTextField fromValueTextField = new JTextField(TEXT_FIELD_COLUMNS);
 
     @PostConstruct
     private void preparePanel() {
@@ -50,14 +50,14 @@ public class CustomerSearchQueryPanel extends JPanel {
         add(fromValueTextField);
     }
 
-    public SearchQuery toSearchQuery() {
+    public CustomerSearchQuery toSearchQuery() {
         Set<String> violations = new HashSet<>();
         BigDecimal fromValue = parseBigDecimal(fromValueTextField.getText(), fromValuePriceLabel.getText(), violations);
 
         if (!violations.isEmpty())
             throw new CustomerCreateDtoValidatorException(violations);
 
-        return new SearchQuery(
+        return new CustomerSearchQuery(
                 convertToLocalDate(fromDateChooser.getDate()),
                 convertToLocalDate(toDateChooser.getDate()),
                 fromValue

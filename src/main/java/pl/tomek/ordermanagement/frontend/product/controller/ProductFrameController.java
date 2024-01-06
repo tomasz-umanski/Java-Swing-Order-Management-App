@@ -15,6 +15,8 @@ import pl.tomek.ordermanagement.frontend.product.view.ProductFrame;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductDialog;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductFormPanel;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductModalButtonPanel;
+import pl.tomek.ordermanagement.frontend.product.view.search.ProductSearchButtonPanel;
+import pl.tomek.ordermanagement.frontend.product.view.search.ProductSearchQueryPanel;
 
 import javax.swing.*;
 import java.util.List;
@@ -57,6 +59,7 @@ public class ProductFrameController extends AbstractFrameController {
     private void prepareListeners() {
         ProductButtonPanel productButtonPanel = productFrame.productButtonPanel();
         ProductModalButtonPanel productAdditionButtonPanel = productDialog.productAdditionButtonPanel();
+        ProductSearchButtonPanel productSearchButtonPanel = productFrame.productSearchPanel().productSearchButtonPanel();
 
         registerAction(productButtonPanel.addButton(), e -> showAddModal());
         registerAction(productButtonPanel.deleteButton(), e -> removeEntity());
@@ -64,6 +67,16 @@ public class ProductFrameController extends AbstractFrameController {
 
         registerAction(productAdditionButtonPanel.cancelButton(), e -> hideAddModal());
         registerAction(productAdditionButtonPanel.saveButton(), e -> saveEntity());
+
+        registerAction(productSearchButtonPanel.searchButton(), e -> searchByQuery());
+    }
+
+    private void searchByQuery() {
+        ProductSearchQueryPanel productSearchQueryPanel = productFrame.productSearchPanel().productSearchQueryPanel();
+        String nameLikeQuery = productSearchQueryPanel.toSearchQuery().trim();
+        List<ProductDto> productDtoList = productFacade.getProductsContainingNamePattern(nameLikeQuery);
+        productTableModel.clear();
+        productTableModel.addEntities(productDtoList);
     }
 
     private void saveEntity() {

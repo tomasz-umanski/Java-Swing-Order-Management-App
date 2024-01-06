@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public record ProductCreateDto(@NotBlank(message = "Name is mandatory")
                                String name,
                                String description,
-                               @NotNull(message = "Sku is mandatory")
+                               @NotBlank(message = "Sku is mandatory")
                                String SKU,
                                @NotNull(message = "Estimated Net Unit Price is mandatory")
                                BigDecimal estimatedNetUnitPrice,

@@ -14,7 +14,7 @@ import pl.tomek.ordermanagement.frontend.customer.view.CustomerFrame;
 import pl.tomek.ordermanagement.frontend.customer.view.modal.*;
 import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchButtonPanel;
 import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQueryPanel;
-import pl.tomek.ordermanagement.frontend.customer.view.search.SearchQuery;
+import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQuery;
 
 import javax.swing.*;
 import java.util.List;
@@ -74,11 +74,11 @@ public class CustomerFrameController extends AbstractFrameController {
     private void searchByQuery() {
         CustomerSearchQueryPanel customerSearchQueryPanel = customerFrame.customerSearchPanel().customerSearchQueryPanel();
         try {
-            SearchQuery searchQuery = customerSearchQueryPanel.toSearchQuery();
+            CustomerSearchQuery customerSearchQuery = customerSearchQueryPanel.toSearchQuery();
             List<CustomerDto> entities = customerFacade.getCustomersWithFilteredOrders(
-                    searchQuery.startDate(),
-                    searchQuery.endDate(),
-                    searchQuery.fromValue()
+                    customerSearchQuery.startDate(),
+                    customerSearchQuery.endDate(),
+                    customerSearchQuery.fromValue()
             );
             customerTableModel.clear();
             customerTableModel.addEntities(entities);

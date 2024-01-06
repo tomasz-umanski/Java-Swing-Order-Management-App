@@ -29,8 +29,8 @@ public class CustomerSearchPanel extends JPanel {
     }
 
     private void initComponents() {
-        add(customerSearchQueryPanel, BorderLayout.WEST);
-        add(customerSearchButtonPanel, BorderLayout.EAST);
+        add(customerSearchQueryPanel, BorderLayout.NORTH);
+        add(customerSearchButtonPanel, BorderLayout.SOUTH);
     }
 
     public CustomerSearchQueryPanel customerSearchQueryPanel() {
