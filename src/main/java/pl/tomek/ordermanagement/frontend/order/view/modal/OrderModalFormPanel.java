@@ -91,8 +91,7 @@ public class OrderModalFormPanel extends JPanel {
 
     private void setData(OrderDto orderDto) {
         orderDateChooser.setDate(convertToDate(orderDto.orderDate()));
-        customerComboBoxModel.clear();
-        customerComboBoxModel.addElement(orderDto.customer());
+        customerComboBoxModel.setSelectedItem(orderDto.customer());
         addressComboBoxModel.clear();
         addressComboBoxModel.addElement(orderDto.shippingAddress());
     }

@@ -1,7 +1,9 @@
 package pl.tomek.ordermanagement.frontend.order.view;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.tomek.ordermanagement.frontend.order.view.search.OrderSearchPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +14,13 @@ public class OrderFrame extends JFrame {
     private static final int DEFAULT_HEIGHT = 768;
     private final OrderTablePanel orderTablePanel;
     private final OrderButtonPanel orderButtonPanel;
+    private final OrderSearchPanel orderSearchPanel;
 
-    public OrderFrame(OrderTablePanel orderTablePanel, OrderButtonPanel orderButtonPanel) {
+    @Autowired
+    public OrderFrame(OrderTablePanel orderTablePanel, OrderButtonPanel orderButtonPanel, OrderSearchPanel orderSearchPanel) {
         this.orderTablePanel = orderTablePanel;
         this.orderButtonPanel = orderButtonPanel;
+        this.orderSearchPanel = orderSearchPanel;
     }
 
     @PostConstruct
@@ -33,6 +38,7 @@ public class OrderFrame extends JFrame {
     }
 
     private void initComponents() {
+        add(orderSearchPanel, BorderLayout.NORTH);
         add(orderTablePanel, BorderLayout.CENTER);
         add(orderButtonPanel, BorderLayout.SOUTH);
     }
@@ -43,5 +49,9 @@ public class OrderFrame extends JFrame {
 
     public OrderButtonPanel orderButtonPanel() {
         return orderButtonPanel;
+    }
+
+    public OrderSearchPanel orderSearchPanel() {
+        return orderSearchPanel;
     }
 }

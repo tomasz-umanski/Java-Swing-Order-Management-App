@@ -17,7 +17,9 @@ import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.feature.product.api.ProductService;
 import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -36,7 +38,9 @@ class OrderFacadeImpl implements OrderFacade {
     public OrderFacadeImpl(OrderService orderService,
                            OrderItemService orderItemService,
                            ProductService productService,
-                           CustomerService customerService, AddressService addressService, ObjectsValidator<OrderCreateDto> validator) {
+                           CustomerService customerService,
+                           AddressService addressService,
+                           ObjectsValidator<OrderCreateDto> validator) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
         this.productService = productService;
@@ -70,17 +74,37 @@ class OrderFacadeImpl implements OrderFacade {
     }
 
     @Override
-    public List<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
-        return orderService.get(startDate, endDate).stream()
-                .map(this::getOrderDtoDetails)
-                .collect(Collectors.toList());
+    public List<OrderDto> getFilteredOrders(LocalDate startDate,
+                                            LocalDate endDate,
+                                            BigDecimal fromValue,
+                                            BigDecimal toValue,
+                                            UUID customerId) {
+        if (startDate == null && endDate == null && fromValue == null && toValue == null && customerId == null) {
+            return getAllOrders();
+        }
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        List<Order> orders = orderService.get(startDate, endDate);
+
+        if (customerId != null) {
+            orders = orders.stream().filter(order -> order.customerId().equals(customerId)).toList();
+        }
+
+        for (Order order : orders) {
+            List<OrderItem> orderItemList = orderItemService.getByOrderId(order.id());
+            BigDecimal orderValue = getOrderValue(orderItemList);
+            if ((fromValue == null || fromValue.compareTo(orderValue) <= 0) &&
+                    (toValue == null || toValue.compareTo(orderValue) >= 0)) {
+                orderDtoList.add(getOrderDtoDetails(order));
+            }
+        }
+        return orderDtoList;
     }
 
-    @Override
-    public List<OrderDto> getOrdersByCustomer(UUID customerId) {
-        return orderService.get(customerId).stream()
-                .map(this::getOrderDtoDetails)
-                .collect(Collectors.toList());
+    private BigDecimal getOrderValue(List<OrderItem> orderItemList) {
+        return orderItemList.stream()
+                .map(OrderItem::grossPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Set<OrderItemDto> createOrderItems(List<OrderItemCreateDto> orderItemsCreateDto, UUID orderId) {

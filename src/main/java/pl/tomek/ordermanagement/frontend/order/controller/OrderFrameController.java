@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
+import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreateDtoValidatorException;
 import pl.tomek.ordermanagement.backend.facade.order.api.*;
 import pl.tomek.ordermanagement.backend.facade.order.exception.OrderCreateDtoValidatorException;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
@@ -22,6 +23,9 @@ import pl.tomek.ordermanagement.frontend.order.view.OrderFrame;
 import pl.tomek.ordermanagement.frontend.order.view.modal.OrderDialog;
 import pl.tomek.ordermanagement.frontend.order.view.modal.OrderModalButtonPanel;
 import pl.tomek.ordermanagement.frontend.order.view.modal.OrderModalFormPanel;
+import pl.tomek.ordermanagement.frontend.order.view.search.OrderSearchButtonPanel;
+import pl.tomek.ordermanagement.frontend.order.view.search.OrderSearchQuery;
+import pl.tomek.ordermanagement.frontend.order.view.search.OrderSearchQueryPanel;
 import pl.tomek.ordermanagement.frontend.orderItem.model.ProductComboBoxModel;
 import pl.tomek.ordermanagement.frontend.orderItem.view.OrderItemButtonPanel;
 import pl.tomek.ordermanagement.frontend.orderItem.view.OrderItemPanel;
@@ -90,6 +94,7 @@ public class OrderFrameController extends AbstractFrameController {
         OrderModalButtonPanel orderModalButtonPanel = orderDialog.orderModalButtonPanel();
         OrderItemButtonPanel orderItemButtonPanel = orderDialog.orderItemFormPanel().orderItemButtonPanel();
         OrderItemModalButtonPanel orderItemModalButtonPanel = orderItemDialog.orderItemModalButtonPanel();
+        OrderSearchButtonPanel orderSearchButtonPanel = orderFrame.orderSearchPanel().orderSearchButtonPanel();
 
         registerAction(orderButtonPanel.addButton(), e -> showAddOrderModal());
         registerAction(orderButtonPanel.deleteButton(), e -> removeOrder());
@@ -105,6 +110,27 @@ public class OrderFrameController extends AbstractFrameController {
         registerAction(orderItemModalButtonPanel.cancelButton(), e -> closeOrderItemModal());
 
         orderModalFormPanel.customerComboBox().addActionListener(e -> loadAddresses());
+
+        registerAction(orderSearchButtonPanel.searchButton(), e -> searchByQuery());
+    }
+
+    private void searchByQuery() {
+        OrderSearchQueryPanel orderSearchQueryPanel = orderFrame.orderSearchPanel().orderSearchQueryPanel();
+        try {
+            OrderSearchQuery orderSearchQuery = orderSearchQueryPanel.toSearchQuery();
+            System.out.println(orderSearchQuery);
+            List<OrderDto> entities = orderFacade.getFilteredOrders(
+                    orderSearchQuery.startDate(),
+                    orderSearchQuery.endDate(),
+                    orderSearchQuery.fromValue(),
+                    orderSearchQuery.toValue(),
+                    orderSearchQuery.customerId()
+            );
+            orderTableModel.clear();
+            orderTableModel.addEntities(entities);
+        } catch (CustomerCreateDtoValidatorException e) {
+            Notifications.showFormValidationAlert(e.getMessage());
+        }
     }
 
     private void showAddOrderItemModal() {
@@ -140,7 +166,6 @@ public class OrderFrameController extends AbstractFrameController {
     }
 
     private void showAddOrderModal() {
-        loadCustomers();
         orderItemTableModel.clear();
         orderDialog.prepareAddDialog();
         orderDialog.setVisible(true);
@@ -149,15 +174,17 @@ public class OrderFrameController extends AbstractFrameController {
     private void loadCustomers() {
         List<CustomerDto> customers = customerFacade.getAllCustomers();
         customerComboBoxModel.clear();
+        customerComboBoxModel.addElement(null);
         customerComboBoxModel.addElements(customers);
     }
 
     private void loadAddresses() {
         CustomerDto customerDto = customerComboBoxModel.getSelectedItem();
+        addressComboBoxModel.clear();
         if (customerDto != null) {
             List<AddressDto> addresses = customerFacade.getCustomersAddresses(customerDto.id());
-            addressComboBoxModel.clear();
             addressComboBoxModel.addElements(addresses);
+            orderDialog.pack();
         }
     }
 
@@ -235,11 +262,12 @@ public class OrderFrameController extends AbstractFrameController {
 
     @Override
     public void initAndOpenFrame() {
-        loadEntities();
+        loadOrders();
+        loadCustomers();
         orderFrame.setVisible(true);
     }
 
-    private void loadEntities() {
+    private void loadOrders() {
         List<OrderDto> entities = orderFacade.getAllOrders();
         orderTableModel.clear();
         orderTableModel.addEntities(entities);

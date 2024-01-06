@@ -1,8 +1,8 @@
 package pl.tomek.ordermanagement.backend.facade.order.api;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public interface OrderFacade {
@@ -12,7 +12,10 @@ public interface OrderFacade {
 
     List<OrderDto> getAllOrders();
 
-    List<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate);
+    List<OrderDto> getFilteredOrders(LocalDate startDate,
+                                     LocalDate endDate,
+                                     BigDecimal fromValue,
+                                     BigDecimal toValue,
+                                     UUID customerId);
 
-    List<OrderDto> getOrdersByCustomer(UUID customerId);
 }
