@@ -36,4 +36,12 @@ public class OrderFrame extends JFrame {
         add(orderTablePanel, BorderLayout.CENTER);
         add(orderButtonPanel, BorderLayout.SOUTH);
     }
+
+    public OrderTablePanel orderTablePanel() {
+        return orderTablePanel;
+    }
+
+    public OrderButtonPanel orderButtonPanel() {
+        return orderButtonPanel;
+    }
 }

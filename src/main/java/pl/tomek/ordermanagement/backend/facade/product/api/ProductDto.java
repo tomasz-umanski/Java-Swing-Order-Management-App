@@ -15,6 +15,12 @@ public record ProductDto(UUID id,
                          BigDecimal height,
                          BigDecimal width,
                          BigDecimal weight) {
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public static ProductDto of(Product product) {
         return new ProductDto(
                 product.id(),

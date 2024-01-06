@@ -10,6 +10,7 @@ import pl.tomek.ordermanagement.backend.facade.product.exception.ProductCreateDt
 import pl.tomek.ordermanagement.frontend.commons.AbstractFrameController;
 import pl.tomek.ordermanagement.frontend.commons.Notifications;
 import pl.tomek.ordermanagement.frontend.product.model.ProductTableModel;
+import pl.tomek.ordermanagement.frontend.product.view.ProductButtonPanel;
 import pl.tomek.ordermanagement.frontend.product.view.ProductFrame;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductDialog;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductFormPanel;
@@ -54,7 +55,7 @@ public class ProductFrameController extends AbstractFrameController {
     }
 
     private void prepareListeners() {
-        pl.tomek.ordermanagement.frontend.product.view.ProductButtonPanel productButtonPanel = productFrame.productButtonPanel();
+        ProductButtonPanel productButtonPanel = productFrame.productButtonPanel();
         ProductModalButtonPanel productAdditionButtonPanel = productDialog.productAdditionButtonPanel();
 
         registerAction(productButtonPanel.addButton(), e -> showAddModal());
@@ -66,7 +67,7 @@ public class ProductFrameController extends AbstractFrameController {
     }
 
     private void saveEntity() {
-        ProductFormPanel productFormPanel = productDialog.productAdditionFormPanel();
+        ProductFormPanel productFormPanel = productDialog.productFormPanel();
         try {
             ProductCreateDto productCreateDto = productFormPanel.toCreateDto();
             ProductDto createdProductDto = productFacade.saveProduct(productCreateDto);
@@ -78,7 +79,7 @@ public class ProductFrameController extends AbstractFrameController {
     }
 
     private void hideAddModal() {
-        productDialog.productAdditionFormPanel().clearForm();
+        productDialog.productFormPanel().clearForm();
         productDialog.dispose();
     }
 

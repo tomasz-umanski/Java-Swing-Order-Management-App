@@ -75,7 +75,7 @@ public class CustomerFormPanel extends JPanel {
         nameTextField.setEnabled(true);
         lastNameTextField.setEnabled(true);
         companyNameTextField.setEnabled(true);
-        taxIdNumberTextField.setEnabled(false);
+        taxIdNumberTextField.setEnabled(true);
         clearForm();
     }
 

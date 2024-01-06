@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.customer.api.*;
 import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreateDtoValidatorException;
+import pl.tomek.ordermanagement.backend.feature.address.api.Address;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
@@ -15,6 +16,7 @@ import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -115,6 +117,26 @@ class CustomerFacadeImpl implements CustomerFacade {
                     return CustomerDto.of(customer, homeAddress, shippingAddress);
                 })
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<AddressDto> getCustomersAddresses(UUID customerId) {
+        Customer customer = customerService.getById(customerId);
+        List<AddressDto> addresses = new ArrayList<>();
+        if (customer != null) {
+            addAddressIfExists(addresses, customer.homeAddressId());
+            addAddressIfExists(addresses, customer.shippingAddressId());
+        }
+        return addresses;
+    }
+
+    private void addAddressIfExists(List<AddressDto> addresses, UUID addressId) {
+        if (addressId != null) {
+            Address address = addressService.getById(addressId);
+            if (address != null) {
+                addresses.add(AddressDto.of(address));
+            }
+        }
     }
 
     private AddressDto getAddressById(UUID addressId) {

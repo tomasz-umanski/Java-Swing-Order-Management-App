@@ -52,7 +52,7 @@ public class CustomerDialog extends JFrame {
     }
 
     private void setFrameUp() {
-        setTitle("Customer Addition");
+        setTitle("Customer");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
     }

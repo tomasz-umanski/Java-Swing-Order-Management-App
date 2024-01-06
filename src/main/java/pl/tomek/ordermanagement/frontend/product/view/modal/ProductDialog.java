@@ -38,7 +38,7 @@ public class ProductDialog extends JFrame {
     }
 
     private void setFrameUp() {
-        setTitle("Product Addition");
+        setTitle("Product");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
     }
@@ -58,7 +58,7 @@ public class ProductDialog extends JFrame {
         productFormPanel.prepareDetailsPanel(productDto);
     }
 
-    public ProductFormPanel productAdditionFormPanel() {
+    public ProductFormPanel productFormPanel() {
         return productFormPanel;
     }
 

@@ -3,7 +3,6 @@ package pl.tomek.ordermanagement.backend.facade.order.api;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
 import pl.tomek.ordermanagement.backend.feature.order.api.Order;
-import pl.tomek.ordermanagement.backend.feature.order.api.OrderCreate;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -22,14 +21,6 @@ public record OrderDto(UUID id,
                 customerDto,
                 addressDto,
                 orderItemsDto
-        );
-    }
-
-    public OrderCreate toCreate(UUID shippingAddressId) {
-        return new OrderCreate(
-                orderDate,
-                customer.id(),
-                shippingAddressId
         );
     }
 }

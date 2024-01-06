@@ -2,7 +2,6 @@ package pl.tomek.ordermanagement.backend.facade.order.api;
 
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
-import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemCreate;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,6 +12,15 @@ public record OrderItemDto(UUID id,
                            BigDecimal discount,
                            BigDecimal netPrice,
                            BigDecimal grossPrice) {
+
+    @Override
+    public String toString() {
+        return "Product=" + product.name() +
+                ", quantity=" + quantity +
+                ", discount=" + discount +
+                ", netPrice=" + netPrice +
+                ", grossPrice=" + grossPrice;
+    }
 
     public static OrderItemDto of(OrderItem orderItem, ProductDto productDto) {
         return new OrderItemDto(
@@ -25,14 +33,13 @@ public record OrderItemDto(UUID id,
         );
     }
 
-    public OrderItemCreate toCreate(UUID orderId) {
-        return new OrderItemCreate(
-                orderId,
-                this.product().id(),
-                this.quantity,
-                this.discount,
-                this.netPrice,
-                this.grossPrice
+    public OrderItemCreateDto toCreateDto() {
+        return new OrderItemCreateDto(
+                this.product,
+                this.quantity(),
+                this.discount(),
+                this.netPrice(),
+                this.grossPrice()
         );
     }
 }

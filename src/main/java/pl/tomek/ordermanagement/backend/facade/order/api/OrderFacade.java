@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface OrderFacade {
-    OrderDto saveOrder(OrderDto orderDto);
+    OrderDto saveOrder(OrderCreateDto orderCreateDto);
 
     void deleteOrder(OrderDto orderDto);
 

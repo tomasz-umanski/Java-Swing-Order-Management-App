@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
-import pl.tomek.ordermanagement.backend.facade.order.api.OrderDto;
-import pl.tomek.ordermanagement.backend.facade.order.api.OrderFacade;
-import pl.tomek.ordermanagement.backend.facade.order.api.OrderItemDto;
+import pl.tomek.ordermanagement.backend.facade.order.api.*;
+import pl.tomek.ordermanagement.backend.facade.order.exception.OrderCreateDtoValidatorException;
 import pl.tomek.ordermanagement.backend.facade.product.api.ProductDto;
-import pl.tomek.ordermanagement.backend.feature.address.api.AddressCreate;
 import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.backend.feature.customer.api.CustomerService;
@@ -17,6 +15,7 @@ import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.feature.product.api.ProductService;
+import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,25 +27,33 @@ import java.util.stream.Collectors;
 class OrderFacadeImpl implements OrderFacade {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
-    private final AddressService addressService;
     private final ProductService productService;
     private final CustomerService customerService;
+    private final AddressService addressService;
+    private final ObjectsValidator<OrderCreateDto> validator;
 
     @Autowired
-    public OrderFacadeImpl(OrderService orderService, OrderItemService orderItemService, AddressService addressService, ProductService productService, CustomerService customerService) {
+    public OrderFacadeImpl(OrderService orderService,
+                           OrderItemService orderItemService,
+                           ProductService productService,
+                           CustomerService customerService, AddressService addressService, ObjectsValidator<OrderCreateDto> validator) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
-        this.addressService = addressService;
         this.productService = productService;
         this.customerService = customerService;
+        this.addressService = addressService;
+        this.validator = validator;
     }
 
     @Override
-    public OrderDto saveOrder(OrderDto orderDto) {
-        AddressDto addressDto = createAddress(orderDto.shippingAddress());
-        Order order = orderService.create(orderDto.toCreate(addressDto.id()));
-        Set<OrderItemDto> orderItemsDto = createOrderItems(orderDto.orderItems(), order.id());
-        return OrderDto.of(order, addressDto, orderItemsDto, orderDto.customer());
+    public OrderDto saveOrder(OrderCreateDto orderCreateDto) {
+        Set<String> violations = validator.validate(orderCreateDto);
+        if (!violations.isEmpty()) {
+            throw new OrderCreateDtoValidatorException(violations);
+        }
+        Order order = orderService.create(orderCreateDto.toDomainCreate());
+        Set<OrderItemDto> orderItemsDto = createOrderItems(orderCreateDto.orderItems(), order.id());
+        return OrderDto.of(order, orderCreateDto.shippingAddress(), orderItemsDto, orderCreateDto.customer());
     }
 
     @Override
@@ -76,19 +83,11 @@ class OrderFacadeImpl implements OrderFacade {
                 .collect(Collectors.toSet());
     }
 
-    private AddressDto createAddress(AddressDto addressDto) {
-        if (addressDto.id() != null) {
-            return addressDto;
-        }
-        AddressCreate addressCreate = addressDto.toCreate();
-        return AddressDto.of(addressService.create(addressCreate));
-    }
-
-    private Set<OrderItemDto> createOrderItems(Set<OrderItemDto> orderItemsDto, UUID orderId) {
-        return orderItemsDto.stream()
-                .map(orderItemDto -> {
-                    OrderItem orderItem = orderItemService.create(orderItemDto.toCreate(orderId));
-                    return OrderItemDto.of(orderItem, orderItemDto.product());
+    private Set<OrderItemDto> createOrderItems(List<OrderItemCreateDto> orderItemsCreateDto, UUID orderId) {
+        return orderItemsCreateDto.stream()
+                .map(orderItemCreateDto -> {
+                    OrderItem orderItem = orderItemService.create(orderItemCreateDto.toDomainCreate(orderId));
+                    return OrderItemDto.of(orderItem, orderItemCreateDto.product());
                 })
                 .collect(Collectors.toSet());
     }

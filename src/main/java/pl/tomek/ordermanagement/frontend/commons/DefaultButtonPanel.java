@@ -4,10 +4,10 @@ import jakarta.annotation.PostConstruct;
 
 import javax.swing.*;
 
-public class DefaultButtonPanel extends JPanel {
-    private JButton addButton;
-    private JButton deleteButton;
-    private JButton detailsButton;
+public abstract class DefaultButtonPanel extends JPanel {
+    protected JButton addButton;
+    protected JButton deleteButton;
+    protected JButton detailsButton;
 
     @PostConstruct
     private void prepare() {
