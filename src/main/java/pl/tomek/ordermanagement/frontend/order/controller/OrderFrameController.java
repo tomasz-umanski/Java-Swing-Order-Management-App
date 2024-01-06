@@ -2,6 +2,7 @@ package pl.tomek.ordermanagement.frontend.order.controller;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import pl.tomek.ordermanagement.backend.facade.customer.api.AddressDto;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
@@ -118,7 +119,6 @@ public class OrderFrameController extends AbstractFrameController {
         OrderSearchQueryPanel orderSearchQueryPanel = orderFrame.orderSearchPanel().orderSearchQueryPanel();
         try {
             OrderSearchQuery orderSearchQuery = orderSearchQueryPanel.toSearchQuery();
-            System.out.println(orderSearchQuery);
             List<OrderDto> entities = orderFacade.getFilteredOrders(
                     orderSearchQuery.startDate(),
                     orderSearchQuery.endDate(),
@@ -249,7 +249,7 @@ public class OrderFrameController extends AbstractFrameController {
             OrderDto createdOrderDto = orderFacade.saveOrder(orderCreateDto);
             orderTableModel.addEntity(createdOrderDto);
             hideAddOrderModal();
-        } catch (OrderCreateDtoValidatorException e) {
+        } catch (OrderCreateDtoValidatorException | DataIntegrityViolationException e) {
             Notifications.showFormValidationAlert(e.getMessage());
         }
     }

@@ -23,11 +23,11 @@ public class CustomerSearchQueryPanel extends JPanel {
     private static final int HORIZONTAL_GAP = -125;
     private static final int VERTICAL_GAP = 20;
     private static final int TEXT_FIELD_COLUMNS = 20;
-    private final JLabel fromDateLabel = new JLabel("Order Date From");
+    private final JLabel fromDateLabel = new JLabel("Customer's Order Date From");
     private final JDateChooser fromDateChooser = new JDateChooser();
-    private final JLabel toDateLabel = new JLabel("Order Date To");
+    private final JLabel toDateLabel = new JLabel("Customer's Order Date To");
     private final JDateChooser toDateChooser = new JDateChooser();
-    private final JLabel fromValuePriceLabel = new JLabel("Order Min Price");
+    private final JLabel fromValueLabel = new JLabel("Customer's Order Min Value");
     private final JTextField fromValueTextField = new JTextField(TEXT_FIELD_COLUMNS);
 
     @PostConstruct
@@ -46,13 +46,13 @@ public class CustomerSearchQueryPanel extends JPanel {
         add(fromDateChooser);
         add(toDateLabel);
         add(toDateChooser);
-        add(fromValuePriceLabel);
+        add(fromValueLabel);
         add(fromValueTextField);
     }
 
     public CustomerSearchQuery toSearchQuery() {
         Set<String> violations = new HashSet<>();
-        BigDecimal fromValue = parseBigDecimal(fromValueTextField.getText(), fromValuePriceLabel.getText(), violations);
+        BigDecimal fromValue = parseBigDecimal(fromValueTextField.getText(), fromValueLabel.getText(), violations);
 
         if (!violations.isEmpty())
             throw new CustomerCreateDtoValidatorException(violations);

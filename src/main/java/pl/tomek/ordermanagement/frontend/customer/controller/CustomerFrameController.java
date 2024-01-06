@@ -2,6 +2,7 @@ package pl.tomek.ordermanagement.frontend.customer.controller;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import pl.tomek.ordermanagement.backend.facade.customer.api.*;
 import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreateDtoValidatorException;
@@ -13,8 +14,8 @@ import pl.tomek.ordermanagement.frontend.customer.view.CustomerButtonPanel;
 import pl.tomek.ordermanagement.frontend.customer.view.CustomerFrame;
 import pl.tomek.ordermanagement.frontend.customer.view.modal.*;
 import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchButtonPanel;
-import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQueryPanel;
 import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQuery;
+import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQueryPanel;
 
 import javax.swing.*;
 import java.util.List;
@@ -164,7 +165,7 @@ public class CustomerFrameController extends AbstractFrameController {
             customerTableModel.addEntity(createdCustomerDto);
             sameAsHomeAddressCheckbox.setVisible(false);
             hideAddModal();
-        } catch (CustomerCreateDtoValidatorException e) {
+        } catch (CustomerCreateDtoValidatorException | DataIntegrityViolationException e) {
             Notifications.showFormValidationAlert(e.getMessage());
         }
     }

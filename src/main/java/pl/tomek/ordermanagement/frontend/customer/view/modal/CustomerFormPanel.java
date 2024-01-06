@@ -96,10 +96,10 @@ public class CustomerFormPanel extends JPanel {
 
     public CustomerCreateDto toCreateDto(AddressCreateDto homeAddressCreateDto, AddressCreateDto shippingAddressCreateDto) {
         return new CustomerCreateDto(
-                nameTextField.getText(),
-                lastNameTextField.getText(),
-                companyNameTextField.getText(),
-                taxIdNumberTextField.getText(),
+                nameTextField.getText().trim(),
+                lastNameTextField.getText().trim(),
+                companyNameTextField.getText().trim(),
+                taxIdNumberTextField.getText().trim(),
                 homeAddressCreateDto,
                 shippingAddressCreateDto
         );

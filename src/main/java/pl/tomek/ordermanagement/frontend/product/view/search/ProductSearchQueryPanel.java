@@ -35,6 +35,6 @@ public class ProductSearchQueryPanel extends JPanel {
     }
 
     public String toSearchQuery() {
-        return nameLikeTextField.getText();
+        return nameLikeTextField.getText().trim();
     }
 }

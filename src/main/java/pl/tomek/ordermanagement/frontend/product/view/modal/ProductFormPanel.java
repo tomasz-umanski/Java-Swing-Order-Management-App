@@ -148,20 +148,20 @@ public class ProductFormPanel extends JPanel {
 
     public ProductCreateDto toCreateDto() {
         Set<String> violations = new HashSet<>();
-        BigDecimal estimatedNetUnitPrice = parseBigDecimal(estimatedNetUnitPriceTextField.getText(), estimatedNetUnitPriceLabel.getText(), violations);
-        BigDecimal estimatedGrossUnitPrice = parseBigDecimal(estimatedGrossUnitPriceTextField.getText(), estimatedGrossUnitPriceLabel.getText(), violations);
-        BigDecimal length = parseBigDecimal(lengthTextField.getText(), lengthLabel.getText(), violations);
-        BigDecimal height = parseBigDecimal(heightTextField.getText(), heightLabel.getText(), violations);
-        BigDecimal width = parseBigDecimal(widthTextField.getText(), widthLabel.getText(), violations);
-        BigDecimal weight = parseBigDecimal(weightTextField.getText(), weightLabel.getText(), violations);
+        BigDecimal estimatedNetUnitPrice = parseBigDecimal(estimatedNetUnitPriceTextField.getText().trim(), estimatedNetUnitPriceLabel.getText(), violations);
+        BigDecimal estimatedGrossUnitPrice = parseBigDecimal(estimatedGrossUnitPriceTextField.getText().trim(), estimatedGrossUnitPriceLabel.getText(), violations);
+        BigDecimal length = parseBigDecimal(lengthTextField.getText().trim(), lengthLabel.getText(), violations);
+        BigDecimal height = parseBigDecimal(heightTextField.getText().trim(), heightLabel.getText(), violations);
+        BigDecimal width = parseBigDecimal(widthTextField.getText().trim(), widthLabel.getText(), violations);
+        BigDecimal weight = parseBigDecimal(weightTextField.getText().trim(), weightLabel.getText(), violations);
 
         if (!violations.isEmpty())
             throw new ProductCreateDtoValidatorException(violations);
 
         return new ProductCreateDto(
-                nameTextField.getText(),
-                descriptionTextField.getText(),
-                SKUTextField.getText(),
+                nameTextField.getText().trim(),
+                descriptionTextField.getText().trim(),
+                SKUTextField.getText().trim(),
                 estimatedNetUnitPrice,
                 estimatedGrossUnitPrice,
                 length,

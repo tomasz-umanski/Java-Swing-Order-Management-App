@@ -122,13 +122,13 @@ public class HomeAddressFormPanel extends JPanel {
 
     public AddressCreateDto toCreateDto() {
         return new AddressCreateDto(
-                streetNameTextField.getText(),
-                buildingNumberTextField.getText(),
-                flatNumberTextField.getText(),
-                cityTextField.getText(),
-                zipCodeTextField.getText(),
-                voivodeshipTextField.getText(),
-                countryTextField.getText()
+                streetNameTextField.getText().trim(),
+                buildingNumberTextField.getText().trim(),
+                flatNumberTextField.getText().trim(),
+                cityTextField.getText().trim(),
+                zipCodeTextField.getText().trim(),
+                voivodeshipTextField.getText().trim(),
+                countryTextField.getText().trim()
         );
     }
 }
