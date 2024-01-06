@@ -10,6 +10,7 @@ import pl.tomek.ordermanagement.backend.feature.order.exception.OrderCreateValid
 import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,10 +55,24 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<Order> get(LocalDate startDate, LocalDate endDate) {
-        return orderRepository.findByOrderDateBetween(startDate, endDate).stream()
-                .map(OrderEntity::toDomain)
-                .collect(Collectors.toSet());
+    public List<Order> get(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null && endDate == null) {
+            return orderRepository.findAll().stream()
+                    .map(OrderEntity::toDomain)
+                    .collect(Collectors.toList());
+        } else if (startDate != null && endDate == null) {
+            return orderRepository.findByOrderDateGreaterThanEqual(startDate).stream()
+                    .map(OrderEntity::toDomain)
+                    .collect(Collectors.toList());
+        } else if (startDate == null) {
+            return orderRepository.findByOrderDateLessThanEqual(endDate).stream()
+                    .map(OrderEntity::toDomain)
+                    .collect(Collectors.toList());
+        } else {
+            return orderRepository.findByOrderDateBetween(startDate, endDate).stream()
+                    .map(OrderEntity::toDomain)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

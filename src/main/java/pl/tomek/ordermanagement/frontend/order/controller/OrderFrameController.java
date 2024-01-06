@@ -110,6 +110,7 @@ public class OrderFrameController extends AbstractFrameController {
     private void showAddOrderItemModal() {
         loadProducts();
         orderItemDialog.prepareAddDialog();
+        orderItemDialog.orderItemModalFormPanel().putProposedValuesFromProduct();
         orderItemDialog.setVisible(true);
     }
 

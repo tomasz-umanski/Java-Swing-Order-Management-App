@@ -2,6 +2,7 @@ package pl.tomek.ordermanagement.backend.feature.orderItem.api;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public interface OrderItemService {
 
     Set<OrderItem> getAll();
 
-    Set<OrderItem> getByOrderId(UUID orderId);
+    List<OrderItem> getByOrderId(UUID orderId);
 
 
     Set<OrderItem> getByProductId(UUID productId);

@@ -3,17 +3,18 @@ package pl.tomek.ordermanagement.frontend.customer.controller;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import pl.tomek.ordermanagement.backend.facade.customer.api.AddressCreateDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerCreateDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerDto;
-import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerFacade;
+import pl.tomek.ordermanagement.backend.facade.customer.api.*;
 import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreateDtoValidatorException;
 import pl.tomek.ordermanagement.frontend.commons.AbstractFrameController;
 import pl.tomek.ordermanagement.frontend.commons.Notifications;
+import pl.tomek.ordermanagement.frontend.customer.model.CustomerOrderTableModel;
 import pl.tomek.ordermanagement.frontend.customer.model.CustomerTableModel;
 import pl.tomek.ordermanagement.frontend.customer.view.CustomerButtonPanel;
 import pl.tomek.ordermanagement.frontend.customer.view.CustomerFrame;
 import pl.tomek.ordermanagement.frontend.customer.view.modal.*;
+import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchButtonPanel;
+import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQueryPanel;
+import pl.tomek.ordermanagement.frontend.customer.view.search.SearchQuery;
 
 import javax.swing.*;
 import java.util.List;
@@ -22,16 +23,18 @@ import java.util.List;
 public class CustomerFrameController extends AbstractFrameController {
     private final CustomerFrame customerFrame;
     private final CustomerTableModel customerTableModel;
+    private final CustomerOrderTableModel customerOrderTableModel;
     private final CustomerDialog customerDialog;
     private final CustomerFacade customerFacade;
 
     @Autowired
     public CustomerFrameController(CustomerFrame customerFrame,
-                                   CustomerTableModel customerTableModel,
+                                   CustomerTableModel customerTableModel, CustomerOrderTableModel customerOrderTableModel,
                                    CustomerFacade customerFacade,
                                    CustomerDialog customerDialog) {
         this.customerFrame = customerFrame;
         this.customerTableModel = customerTableModel;
+        this.customerOrderTableModel = customerOrderTableModel;
         this.customerFacade = customerFacade;
         this.customerDialog = customerDialog;
     }
@@ -43,11 +46,11 @@ public class CustomerFrameController extends AbstractFrameController {
 
     @Override
     public void initAndOpenFrame() {
-        loadEntities();
+        loadCustomers();
         customerFrame.setVisible(true);
     }
 
-    private void loadEntities() {
+    private void loadCustomers() {
         List<CustomerDto> entities = customerFacade.getAllCustomers();
         customerTableModel.clear();
         customerTableModel.addEntities(entities);
@@ -56,6 +59,7 @@ public class CustomerFrameController extends AbstractFrameController {
     private void prepareListeners() {
         CustomerButtonPanel customerButtonPanel = customerFrame.customerButtonPanel();
         CustomerAdditionButtonPanel customerAdditionButtonPanel = customerDialog.customerAdditionButtonPanel();
+        CustomerSearchButtonPanel customerSearchButtonPanel = customerFrame.customerSearchPanel().customerSearchButtonPanel();
 
         registerAction(customerButtonPanel.addButton(), e -> showAddModal());
         registerAction(customerButtonPanel.deleteButton(), e -> removeEntity());
@@ -63,6 +67,24 @@ public class CustomerFrameController extends AbstractFrameController {
 
         registerAction(customerAdditionButtonPanel.cancelButton(), e -> hideAddModal());
         registerAction(customerAdditionButtonPanel.saveButton(), e -> saveEntity());
+
+        registerAction(customerSearchButtonPanel.searchButton(), e -> searchByQuery());
+    }
+
+    private void searchByQuery() {
+        CustomerSearchQueryPanel customerSearchQueryPanel = customerFrame.customerSearchPanel().customerSearchQueryPanel();
+        try {
+            SearchQuery searchQuery = customerSearchQueryPanel.toSearchQuery();
+            List<CustomerDto> entities = customerFacade.getCustomersWithFilteredOrders(
+                    searchQuery.startDate(),
+                    searchQuery.endDate(),
+                    searchQuery.fromValue()
+            );
+            customerTableModel.clear();
+            customerTableModel.addEntities(entities);
+        } catch (CustomerCreateDtoValidatorException e) {
+            Notifications.showFormValidationAlert(e.getMessage());
+        }
     }
 
     private void showAddModal() {
@@ -103,8 +125,16 @@ public class CustomerFrameController extends AbstractFrameController {
             );
         } else {
             CustomerDto customerDto = customerTableModel.getEntityByRow(selectedRow);
+            loadOrdersForCustomer(customerDto.customerOrderDtoList());
             customerDialog.prepareDetailsDialog(customerDto);
             customerDialog.setVisible(true);
+        }
+    }
+
+    private void loadOrdersForCustomer(List<CustomerOrderDto> customerOrderDtoList) {
+        customerOrderTableModel.clear();
+        if (customerOrderDtoList != null) {
+            customerOrderTableModel.addEntities(customerOrderDtoList);
         }
     }
 

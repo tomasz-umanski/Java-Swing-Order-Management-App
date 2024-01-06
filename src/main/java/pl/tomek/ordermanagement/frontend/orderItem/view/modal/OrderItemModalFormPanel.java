@@ -53,6 +53,7 @@ public class OrderItemModalFormPanel extends JPanel {
 
     private void initComponents() {
         productComboBox = new JComboBox<>(productComboBoxModel);
+        productComboBox.addActionListener(e -> putProposedValuesFromProduct());
 
         add(productLabel);
         add(productComboBox);
@@ -64,6 +65,14 @@ public class OrderItemModalFormPanel extends JPanel {
         add(netPriceTextField);
         add(grossPriceLabel);
         add(grossPriceTextField);
+    }
+
+    public void putProposedValuesFromProduct() {
+        ProductDto productDto = productComboBoxModel.getSelectedItem();
+        if (productDto != null) {
+            netPriceTextField.setText(productDto.estimatedNetUnitPrice().toString());
+            grossPriceTextField.setText(productDto.estimatedGrossUnitPrice().toString());
+        }
     }
 
     public void prepareAddPanel() {
@@ -121,5 +130,9 @@ public class OrderItemModalFormPanel extends JPanel {
             violations.add(fieldName + ": " + e.getMessage() + "\n");
         }
         return value;
+    }
+
+    public JComboBox<ProductDto> productComboBox() {
+        return productComboBox;
     }
 }

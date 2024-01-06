@@ -11,15 +11,15 @@ import pl.tomek.ordermanagement.backend.feature.address.api.AddressService;
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
 import pl.tomek.ordermanagement.backend.feature.customer.api.CustomerCreate;
 import pl.tomek.ordermanagement.backend.feature.customer.api.CustomerService;
+import pl.tomek.ordermanagement.backend.feature.order.api.Order;
 import pl.tomek.ordermanagement.backend.feature.order.api.OrderService;
+import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItem;
 import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +67,7 @@ class CustomerFacadeImpl implements CustomerFacade {
     private CustomerDto createCustomer(CustomerCreateDto customerCreateDto, AddressDto homeAddress, AddressDto shippingAddress) {
         UUID shippingAddressId = (shippingAddress != null) ? shippingAddress.id() : null;
         CustomerCreate customerCreate = customerCreateDto.toDomainCreate(homeAddress.id(), shippingAddressId);
-        return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress);
+        return CustomerDto.of(customerService.create(customerCreate), homeAddress, shippingAddress, null);
     }
 
 
@@ -102,21 +102,19 @@ class CustomerFacadeImpl implements CustomerFacade {
                 .map(customer -> {
                     AddressDto homeAddress = getAddressById(customer.homeAddressId());
                     AddressDto shippingAddress = getAddressById(customer.shippingAddressId());
-                    return CustomerDto.of(customer, homeAddress, shippingAddress);
+                    List<CustomerOrderDto> customerOrderDtoList = orderService.get(customer.id())
+                            .stream().map(order -> CustomerOrderDto.of(order, getOrderValue(order.id())))
+                            .toList();
+                    return CustomerDto.of(customer, homeAddress, shippingAddress, customerOrderDtoList);
                 })
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Set<CustomerDto> getCustomersByOrderDateRange(LocalDate startDate, LocalDate endDate) {
-        return orderService.get(startDate, endDate).stream()
-                .map(order -> {
-                    Customer customer = customerService.getById(order.customerId());
-                    AddressDto homeAddress = getAddressById(customer.homeAddressId());
-                    AddressDto shippingAddress = getAddressById(customer.shippingAddressId());
-                    return CustomerDto.of(customer, homeAddress, shippingAddress);
-                })
-                .collect(Collectors.toSet());
+    private BigDecimal getOrderValue(UUID orderId) {
+        List<OrderItem> orderItemList = orderItemService.getByOrderId(orderId);
+        return orderItemList.stream()
+                .map(OrderItem::grossPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
@@ -129,6 +127,41 @@ class CustomerFacadeImpl implements CustomerFacade {
         }
         return addresses;
     }
+
+    @Override
+    public List<CustomerDto> getCustomersWithFilteredOrders(LocalDate startDate, LocalDate endDate, BigDecimal minValue) {
+        if (startDate == null && endDate == null && minValue == null) {
+            return getAllCustomers();
+        }
+
+        Map<UUID, List<CustomerOrderDto>> customerOrderMap = new HashMap<>();
+        List<Order> orders = orderService.get(startDate, endDate);
+
+        for (Order order : orders) {
+            BigDecimal orderValue = getOrderValue(order.id());
+            if (minValue == null || minValue.compareTo(orderValue) <= 0) {
+                CustomerOrderDto customerOrderDto = CustomerOrderDto.of(order, orderValue);
+                customerOrderMap.computeIfAbsent(order.customerId(), k -> new ArrayList<>()).add(customerOrderDto);
+            }
+        }
+
+        List<CustomerDto> customerDtoList = new ArrayList<>();
+        customerOrderMap.keySet().forEach(customerId -> {
+            Customer customer = customerService.getById(customerId);
+            if (customer != null) {
+                CustomerDto customerDto = CustomerDto.of(
+                        customer,
+                        getAddressById(customer.homeAddressId()),
+                        getAddressById(customer.shippingAddressId()),
+                        customerOrderMap.get(customerId)
+                );
+                customerDtoList.add(customerDto);
+            }
+        });
+
+        return customerDtoList;
+    }
+
 
     private void addAddressIfExists(List<AddressDto> addresses, UUID addressId) {
         if (addressId != null) {

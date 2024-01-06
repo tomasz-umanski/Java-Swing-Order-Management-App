@@ -12,7 +12,7 @@ public interface OrderFacade {
 
     List<OrderDto> getAllOrders();
 
-    Set<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate);
+    List<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate);
 
-    Set<OrderDto> getOrdersByCustomer(UUID customerId);
+    List<OrderDto> getOrdersByCustomer(UUID customerId);
 }

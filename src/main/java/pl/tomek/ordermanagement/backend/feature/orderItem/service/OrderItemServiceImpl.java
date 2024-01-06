@@ -9,6 +9,7 @@ import pl.tomek.ordermanagement.backend.feature.orderItem.api.OrderItemService;
 import pl.tomek.ordermanagement.backend.feature.orderItem.exception.OrderItemCreateValidatorException;
 import pl.tomek.ordermanagement.backend.validation.ObjectsValidator;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,10 +54,10 @@ class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public Set<OrderItem> getByOrderId(UUID orderId) {
+    public List<OrderItem> getByOrderId(UUID orderId) {
         return orderItemRepository.findByOrderId(orderId).stream()
                 .map(OrderItemEntity::toDomain)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

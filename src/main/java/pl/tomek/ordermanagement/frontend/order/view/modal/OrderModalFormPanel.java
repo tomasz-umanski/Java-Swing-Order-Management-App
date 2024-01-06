@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class OrderModalFormPanel extends JPanel {
@@ -91,7 +90,7 @@ public class OrderModalFormPanel extends JPanel {
     }
 
     private void setData(OrderDto orderDto) {
-        orderDateChooser.setDate(convertToDateViaInstant(orderDto.orderDate()));
+        orderDateChooser.setDate(convertToDate(orderDto.orderDate()));
         customerComboBoxModel.clear();
         customerComboBoxModel.addElement(orderDto.customer());
         addressComboBoxModel.clear();
@@ -105,14 +104,14 @@ public class OrderModalFormPanel extends JPanel {
         AddressDto addressDto = addressComboBox.getItemAt(selectedIndex);
 
         return new OrderCreateDto(
-                convertToLocalDateViaInstant(orderDateChooser.getDate()),
+                convertToLocalDate(orderDateChooser.getDate()),
                 customerDto,
                 addressDto,
                 orderItemCreateDtoList
         );
     }
 
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+    public LocalDate convertToLocalDate(Date dateToConvert) {
         if (dateToConvert != null) {
             return dateToConvert.toInstant()
                     .atZone(ZoneId.systemDefault())
@@ -121,7 +120,7 @@ public class OrderModalFormPanel extends JPanel {
         return null;
     }
 
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
+    public Date convertToDate(LocalDate dateToConvert) {
         if (dateToConvert != null) {
             return Date.from(dateToConvert.atStartOfDay()
                     .atZone(ZoneId.systemDefault())

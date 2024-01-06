@@ -70,17 +70,17 @@ class OrderFacadeImpl implements OrderFacade {
     }
 
     @Override
-    public Set<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
+    public List<OrderDto> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
         return orderService.get(startDate, endDate).stream()
                 .map(this::getOrderDtoDetails)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<OrderDto> getOrdersByCustomer(UUID customerId) {
+    public List<OrderDto> getOrdersByCustomer(UUID customerId) {
         return orderService.get(customerId).stream()
                 .map(this::getOrderDtoDetails)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     private Set<OrderItemDto> createOrderItems(List<OrderItemCreateDto> orderItemsCreateDto, UUID orderId) {
@@ -114,7 +114,7 @@ class OrderFacadeImpl implements OrderFacade {
         Customer customer = customerService.getById(customerId);
         AddressDto homeAddressDto = getAddressById(customer.homeAddressId());
         AddressDto shippingAddressDto = getAddressById(customer.shippingAddressId());
-        return CustomerDto.of(customer, homeAddressDto, shippingAddressDto);
+        return CustomerDto.of(customer, homeAddressDto, shippingAddressDto, null);
     }
 
     private AddressDto getAddressById(UUID addressId) {

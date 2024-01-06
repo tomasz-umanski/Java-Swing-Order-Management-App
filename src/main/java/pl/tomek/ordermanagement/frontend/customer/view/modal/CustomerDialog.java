@@ -14,16 +14,18 @@ public class CustomerDialog extends JFrame {
     private final HomeAddressFormPanel homeAddressFormPanel;
     private final ShippingAddressFormPanel shippingAddressFormPanel;
     private final CustomerAdditionButtonPanel customerAdditionButtonPanel;
+    private final CustomerOrderTablePanel customerOrderTablePanel;
 
     @Autowired
     public CustomerDialog(CustomerFormPanel customerFormPanel,
                           CustomerAdditionButtonPanel customerAdditionButtonPanel,
                           HomeAddressFormPanel homeAddressFormPanel,
-                          ShippingAddressFormPanel shippingAddressFormPanel) {
+                          ShippingAddressFormPanel shippingAddressFormPanel, CustomerOrderTablePanel customerOrderTablePanel) {
         this.customerFormPanel = customerFormPanel;
         this.homeAddressFormPanel = homeAddressFormPanel;
         this.shippingAddressFormPanel = shippingAddressFormPanel;
         this.customerAdditionButtonPanel = customerAdditionButtonPanel;
+        this.customerOrderTablePanel = customerOrderTablePanel;
     }
 
     @PostConstruct
@@ -36,7 +38,6 @@ public class CustomerDialog extends JFrame {
         add(customerFormPanel, BorderLayout.WEST);
         add(homeAddressFormPanel, BorderLayout.CENTER);
         add(shippingAddressFormPanel, BorderLayout.EAST);
-        add(customerAdditionButtonPanel, BorderLayout.SOUTH);
     }
 
     public void prepareAddDialog() {
@@ -58,14 +59,17 @@ public class CustomerDialog extends JFrame {
     }
 
     private void prepareAddComponents() {
-        customerAdditionButtonPanel.setVisible(true);
+        remove(customerOrderTablePanel);
+        add(customerAdditionButtonPanel, BorderLayout.SOUTH);
         customerFormPanel.prepareAddPanel();
         homeAddressFormPanel.prepareAddPanel();
         shippingAddressFormPanel.prepareAddPanel();
     }
 
     private void prepareDetailsComponents(CustomerDto customerDto) {
-        customerAdditionButtonPanel.setVisible(false);
+        remove(customerAdditionButtonPanel);
+        add(customerOrderTablePanel,BorderLayout.SOUTH);
+
         customerFormPanel.prepareDetailsPanel(customerDto);
         homeAddressFormPanel.prepareDetailsPanel(customerDto.homeAddress());
         shippingAddressFormPanel.prepareDetailsPanel(customerDto.shippingAddress());
