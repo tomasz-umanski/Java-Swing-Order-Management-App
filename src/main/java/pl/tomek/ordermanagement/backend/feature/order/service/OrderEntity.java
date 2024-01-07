@@ -27,7 +27,7 @@ class OrderEntity {
     private UUID customerId;
     @NotNull
     private UUID shippingAddressId;
-    private boolean archived = FALSE;
+    private final boolean archived = FALSE;
 
     public static OrderEntity of(OrderCreate orderCreate) {
         OrderEntity orderEntity = new OrderEntity();

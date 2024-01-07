@@ -11,6 +11,7 @@ import pl.tomek.ordermanagement.utils.BaseTest;
 import pl.tomek.ordermanagement.utils.UnitTest;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,7 +63,7 @@ class OrderServiceTest extends BaseTest {
         service.create(orderCreate);
         service.create(secondOrderCreate);
 
-        Set<Order> retrievedOrderSetDto = service.get(startDate, endDate);
+        List<Order> retrievedOrderSetDto = service.get(startDate, endDate);
 
         assertNotNull(retrievedOrderSetDto);
         assertEquals(retrievedOrderSetDto.size(), 1);

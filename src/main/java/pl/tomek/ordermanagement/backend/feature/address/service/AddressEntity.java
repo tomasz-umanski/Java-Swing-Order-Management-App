@@ -34,7 +34,7 @@ class AddressEntity {
     @NotNull
     private String country;
     @NotNull
-    private boolean archived = FALSE;
+    private final boolean archived = FALSE;
 
     public static AddressEntity of(AddressCreate addressCreate) {
         AddressEntity addressEntity = new AddressEntity();

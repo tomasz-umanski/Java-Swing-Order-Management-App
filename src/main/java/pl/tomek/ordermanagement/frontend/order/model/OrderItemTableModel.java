@@ -3,7 +3,6 @@ package pl.tomek.ordermanagement.frontend.order.model;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 import pl.tomek.ordermanagement.backend.facade.order.api.OrderItemCreateDto;
-import pl.tomek.ordermanagement.backend.facade.order.api.OrderItemDto;
 import pl.tomek.ordermanagement.frontend.commons.DefaultTableModel;
 
 @Component

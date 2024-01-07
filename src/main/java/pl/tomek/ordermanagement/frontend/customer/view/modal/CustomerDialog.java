@@ -68,7 +68,7 @@ public class CustomerDialog extends JFrame {
 
     private void prepareDetailsComponents(CustomerDto customerDto) {
         remove(customerAdditionButtonPanel);
-        add(customerOrderTablePanel,BorderLayout.SOUTH);
+        add(customerOrderTablePanel, BorderLayout.SOUTH);
 
         customerFormPanel.prepareDetailsPanel(customerDto);
         homeAddressFormPanel.prepareDetailsPanel(customerDto.homeAddress());

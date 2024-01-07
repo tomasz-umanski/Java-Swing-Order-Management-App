@@ -30,7 +30,7 @@ class CustomerEntity {
     private UUID homeAddressId;
     private UUID shippingAddressId;
     @NotNull
-    private boolean archived = FALSE;
+    private final boolean archived = FALSE;
 
     public static CustomerEntity of(CustomerCreate customerCreate) {
         CustomerEntity customerEntity = new CustomerEntity();

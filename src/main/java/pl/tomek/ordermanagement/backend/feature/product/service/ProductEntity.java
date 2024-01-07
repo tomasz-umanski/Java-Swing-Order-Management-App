@@ -37,7 +37,7 @@ class ProductEntity {
     private BigDecimal width;
     private BigDecimal weight;
     @NotNull
-    private boolean archived = FALSE;
+    private final boolean archived = FALSE;
 
     public static ProductEntity of(ProductCreate productCreate) {
         ProductEntity productEntity = new ProductEntity();

@@ -8,6 +8,8 @@ import pl.tomek.ordermanagement.frontend.menu.controller.MenuFrameController;
 import pl.tomek.ordermanagement.frontend.menu.view.MenuFrame;
 import pl.tomek.ordermanagement.frontend.order.controller.OrderFrameController;
 import pl.tomek.ordermanagement.frontend.order.view.OrderFrame;
+import pl.tomek.ordermanagement.frontend.order.view.modal.OrderDialog;
+import pl.tomek.ordermanagement.frontend.orderItem.view.modal.OrderItemDialog;
 import pl.tomek.ordermanagement.frontend.product.controller.ProductFrameController;
 import pl.tomek.ordermanagement.frontend.product.view.ProductFrame;
 import pl.tomek.ordermanagement.frontend.product.view.modal.ProductDialog;
@@ -44,4 +46,9 @@ public class BaseTest {
     @MockBean
     private OrderFrame orderFrame;
 
+    @MockBean
+    private OrderDialog orderDialog;
+
+    @MockBean
+    private OrderItemDialog orderItemDialog;
 }

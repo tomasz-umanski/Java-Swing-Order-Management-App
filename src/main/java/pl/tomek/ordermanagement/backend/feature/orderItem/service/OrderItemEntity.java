@@ -33,7 +33,7 @@ class OrderItemEntity {
     @NotNull
     private BigDecimal grossPrice;
     @NotNull
-    private boolean archived = FALSE;
+    private final boolean archived = FALSE;
 
     public static OrderItemEntity of(OrderItemCreate orderItemCreate) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();

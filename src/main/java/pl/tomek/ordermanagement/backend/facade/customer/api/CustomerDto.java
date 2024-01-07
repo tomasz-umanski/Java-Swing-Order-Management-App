@@ -1,7 +1,6 @@
 package pl.tomek.ordermanagement.backend.facade.customer.api;
 
 import pl.tomek.ordermanagement.backend.feature.customer.api.Customer;
-import pl.tomek.ordermanagement.backend.feature.order.api.Order;
 
 import java.util.List;
 import java.util.UUID;

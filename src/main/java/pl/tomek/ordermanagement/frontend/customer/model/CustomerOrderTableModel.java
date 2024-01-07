@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 import pl.tomek.ordermanagement.backend.facade.customer.api.CustomerOrderDto;
 import pl.tomek.ordermanagement.frontend.commons.DefaultTableModel;
 
-import java.util.Comparator;
-
 @Component
 public class CustomerOrderTableModel extends DefaultTableModel<CustomerOrderDto> {
     private static final int ORDER_ID_INDEX = 0;
