@@ -103,7 +103,7 @@ class OrderFacadeImpl implements OrderFacade {
 
     private BigDecimal getOrderValue(List<OrderItem> orderItemList) {
         return orderItemList.stream()
-                .map(OrderItem::grossPrice)
+                .map(orderItem -> orderItem.grossPrice().multiply(orderItem.quantity()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

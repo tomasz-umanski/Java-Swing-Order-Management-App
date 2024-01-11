@@ -113,7 +113,7 @@ class CustomerFacadeImpl implements CustomerFacade {
     private BigDecimal getOrderValue(UUID orderId) {
         List<OrderItem> orderItemList = orderItemService.getByOrderId(orderId);
         return orderItemList.stream()
-                .map(OrderItem::grossPrice)
+                .map(orderItem -> orderItem.grossPrice().multiply(orderItem.quantity()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

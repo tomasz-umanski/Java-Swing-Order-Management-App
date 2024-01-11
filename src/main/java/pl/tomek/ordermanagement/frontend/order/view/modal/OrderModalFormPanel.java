@@ -130,6 +130,7 @@ public class OrderModalFormPanel extends JPanel {
 
     public void clearForm() {
         orderDateChooser.setDate(null);
+        customerComboBox.setSelectedIndex(0);
     }
 
     public JComboBox<CustomerDto> customerComboBox() {

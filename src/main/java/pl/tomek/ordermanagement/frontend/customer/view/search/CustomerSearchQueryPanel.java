@@ -7,9 +7,11 @@ import pl.tomek.ordermanagement.backend.facade.customer.exception.CustomerCreate
 import pl.tomek.ordermanagement.frontend.commons.Borders;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -22,13 +24,12 @@ public class CustomerSearchQueryPanel extends JPanel {
     private static final int LAYOUT_COLS = 2;
     private static final int HORIZONTAL_GAP = -125;
     private static final int VERTICAL_GAP = 20;
-    private static final int TEXT_FIELD_COLUMNS = 20;
     private final JLabel fromDateLabel = new JLabel("Customer's Order Date From");
     private final JDateChooser fromDateChooser = new JDateChooser();
     private final JLabel toDateLabel = new JLabel("Customer's Order Date To");
     private final JDateChooser toDateChooser = new JDateChooser();
     private final JLabel fromValueLabel = new JLabel("Customer's Order Min Value");
-    private final JTextField fromValueTextField = new JTextField(TEXT_FIELD_COLUMNS);
+    private final JTextField fromValueTextField = createNumberField();
 
     @PostConstruct
     private void preparePanel() {
@@ -71,6 +72,14 @@ public class CustomerSearchQueryPanel extends JPanel {
                     .toLocalDate();
         }
         return null;
+    }
+
+    private JTextField createNumberField() {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        NumberFormatter formatter = new NumberFormatter(decimalFormat);
+        formatter.setValueClass(Double.class);
+        formatter.setMinimum(0.0);
+        return new JFormattedTextField(formatter);
     }
 
     private BigDecimal parseBigDecimal(String text, String fieldName, Set<String> violations) {

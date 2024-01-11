@@ -8,9 +8,11 @@ import pl.tomek.ordermanagement.backend.facade.product.exception.ProductCreateDt
 import pl.tomek.ordermanagement.frontend.commons.Borders;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,12 +65,12 @@ public class ProductFormPanel extends JPanel {
         nameTextField = createTextField();
         descriptionTextField = createTextField();
         SKUTextField = createTextField();
-        estimatedNetUnitPriceTextField = createTextField();
-        estimatedGrossUnitPriceTextField = createTextField();
-        lengthTextField = createTextField();
-        heightTextField = createTextField();
-        widthTextField = createTextField();
-        weightTextField = createTextField();
+        estimatedNetUnitPriceTextField = createNumberField();
+        estimatedGrossUnitPriceTextField = createNumberField();
+        lengthTextField = createNumberField();
+        heightTextField = createNumberField();
+        widthTextField = createNumberField();
+        weightTextField = createNumberField();
 
         add(nameLabel);
         add(nameTextField);
@@ -120,14 +122,30 @@ public class ProductFormPanel extends JPanel {
         SKUTextField.setText(productDto.SKU());
         estimatedNetUnitPriceTextField.setText(productDto.estimatedNetUnitPrice().toString());
         estimatedGrossUnitPriceTextField.setText(productDto.estimatedGrossUnitPrice().toString());
-        lengthTextField.setText(productDto.length().toString());
-        heightTextField.setText(productDto.height().toString());
-        widthTextField.setText(productDto.width().toString());
-        weightTextField.setText(productDto.weight().toString());
+        if (productDto.length() != null) {
+            lengthTextField.setText(productDto.length().toString());
+        }
+        if (productDto.height() != null) {
+            heightTextField.setText(productDto.height().toString());
+        }
+        if (productDto.width() != null) {
+            widthTextField.setText(productDto.width().toString());
+        }
+        if (productDto.weight() != null) {
+            weightTextField.setText(productDto.weight().toString());
+        }
     }
 
     private JTextField createTextField() {
         return new JTextField(TEXT_FIELD_COLUMNS);
+    }
+
+    private JTextField createNumberField() {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        NumberFormatter formatter = new NumberFormatter(decimalFormat);
+        formatter.setValueClass(Double.class);
+        formatter.setMinimum(0.0);
+        return new JFormattedTextField(formatter);
     }
 
     public void clearForm() {

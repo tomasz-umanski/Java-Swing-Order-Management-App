@@ -10,9 +10,11 @@ import pl.tomek.ordermanagement.frontend.commons.Borders;
 import pl.tomek.ordermanagement.frontend.orderItem.model.ProductComboBoxModel;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,10 +29,10 @@ public class OrderItemModalFormPanel extends JPanel {
     private final JLabel discountLabel = new JLabel("Discount");
     private final JLabel netPriceLabel = new JLabel("Net Price");
     private final JLabel grossPriceLabel = new JLabel("Gross Price");
-    private final JTextField quantityTextField = createTextField();
-    private final JTextField discountTextField = createTextField();
-    private final JTextField netPriceTextField = createTextField();
-    private final JTextField grossPriceTextField = createTextField();
+    private final JTextField quantityTextField = createNumberField();
+    private final JTextField discountTextField = createNumberField();
+    private final JTextField netPriceTextField = createNumberField();
+    private final JTextField grossPriceTextField = createNumberField();
     private final JLabel productLabel = new JLabel("Product");
     private JComboBox<ProductDto> productComboBox;
     private final ProductComboBoxModel productComboBoxModel;
@@ -95,10 +97,6 @@ public class OrderItemModalFormPanel extends JPanel {
         grossPriceTextField.setText("");
     }
 
-    private JTextField createTextField() {
-        return new JTextField(TEXT_FIELD_COLUMNS);
-    }
-
     public OrderItemCreateDto toCreateDto() {
         int selectedIndex = productComboBox.getSelectedIndex();
         ProductDto productDto = productComboBox.getItemAt(selectedIndex);
@@ -121,6 +119,14 @@ public class OrderItemModalFormPanel extends JPanel {
         );
     }
 
+    private JTextField createNumberField() {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        NumberFormatter formatter = new NumberFormatter(decimalFormat);
+        formatter.setValueClass(Double.class);
+        formatter.setMinimum(0.0);
+        return new JFormattedTextField(formatter);
+    }
+
     private BigDecimal parseBigDecimal(String text, String fieldName, Set<String> violations) {
         BigDecimal value = null;
         try {
@@ -130,9 +136,5 @@ public class OrderItemModalFormPanel extends JPanel {
             violations.add(fieldName + ": " + e.getMessage() + "\n");
         }
         return value;
-    }
-
-    public JComboBox<ProductDto> productComboBox() {
-        return productComboBox;
     }
 }
