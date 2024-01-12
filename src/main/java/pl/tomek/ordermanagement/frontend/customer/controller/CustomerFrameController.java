@@ -134,7 +134,7 @@ public class CustomerFrameController extends AbstractFrameController {
 
     private void loadOrdersForCustomer(List<CustomerOrderDto> customerOrderDtoList) {
         customerOrderTableModel.clear();
-        if (customerOrderDtoList != null) {
+        if (customerOrderDtoList != null && !customerOrderDtoList.isEmpty()) {
             customerOrderTableModel.addEntities(customerOrderDtoList);
         }
     }
