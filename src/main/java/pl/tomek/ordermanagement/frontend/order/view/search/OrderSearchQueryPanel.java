@@ -33,9 +33,9 @@ public class OrderSearchQueryPanel extends JPanel {
     private final JLabel toDateLabel = new JLabel("Order Date To");
     private final JDateChooser toDateChooser = new JDateChooser();
     private final JLabel fromValuePriceLabel = new JLabel("Order Min Price");
-    private final JTextField fromValueTextField = createNumberField();
+    private final JFormattedTextField fromValueTextField = createNumberField();
     private final JLabel toValuePriceLabel = new JLabel("Order Max Price");
-    private final JTextField toValueTextField = createNumberField();
+    private final JFormattedTextField toValueTextField = createNumberField();
     private final JLabel customerLabel = new JLabel("Customer");
     private JComboBox<CustomerDto> customerComboBox;
     private final CustomerComboBoxModel customerComboBoxModel;
@@ -90,6 +90,14 @@ public class OrderSearchQueryPanel extends JPanel {
         );
     }
 
+    public void clearForm() {
+        fromDateChooser.setDate(null);
+        toDateChooser.setDate(null);
+        fromValueTextField.setValue(null);
+        toValueTextField.setValue(null);
+        customerComboBox.setSelectedIndex(0);
+    }
+
     public LocalDate convertToLocalDate(Date dateToConvert) {
         if (dateToConvert != null) {
             return dateToConvert.toInstant()
@@ -99,10 +107,11 @@ public class OrderSearchQueryPanel extends JPanel {
         return null;
     }
 
-    private JTextField createNumberField() {
+    private JFormattedTextField createNumberField() {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         NumberFormatter formatter = new NumberFormatter(decimalFormat);
         formatter.setValueClass(Double.class);
+        formatter.setAllowsInvalid(true);
         formatter.setMinimum(0.0);
         return new JFormattedTextField(formatter);
     }

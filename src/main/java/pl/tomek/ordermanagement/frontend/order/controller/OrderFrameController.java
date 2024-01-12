@@ -113,6 +113,12 @@ public class OrderFrameController extends AbstractFrameController {
         orderModalFormPanel.customerComboBox().addActionListener(e -> loadAddresses());
 
         registerAction(orderSearchButtonPanel.searchButton(), e -> searchByQuery());
+        registerAction(orderSearchButtonPanel.clearButton(), e -> clearSearchQueries());
+
+    }
+
+    private void clearSearchQueries() {
+        orderFrame.orderSearchPanel().orderSearchQueryPanel().clearForm();
     }
 
     private void searchByQuery() {

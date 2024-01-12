@@ -9,6 +9,8 @@ import javax.swing.*;
 public class OrderSearchButtonPanel extends JPanel {
 
     private JButton searchButton;
+    private JButton clearButton;
+
 
     @PostConstruct
     private void preparePanel() {
@@ -18,9 +20,15 @@ public class OrderSearchButtonPanel extends JPanel {
     private void initComponents() {
         searchButton = new JButton("Search");
         add(searchButton);
+        clearButton = new JButton("Clear");
+        add(clearButton);
     }
 
     public JButton searchButton() {
         return searchButton;
+    }
+
+    public JButton clearButton() {
+        return clearButton;
     }
 }

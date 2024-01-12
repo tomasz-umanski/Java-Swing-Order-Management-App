@@ -35,12 +35,12 @@ public class ProductFormPanel extends JPanel {
     private JTextField nameTextField;
     private JTextField descriptionTextField;
     private JTextField SKUTextField;
-    private JTextField estimatedNetUnitPriceTextField;
-    private JTextField estimatedGrossUnitPriceTextField;
-    private JTextField lengthTextField;
-    private JTextField heightTextField;
-    private JTextField widthTextField;
-    private JTextField weightTextField;
+    private JFormattedTextField estimatedNetUnitPriceTextField;
+    private JFormattedTextField estimatedGrossUnitPriceTextField;
+    private JFormattedTextField lengthTextField;
+    private JFormattedTextField heightTextField;
+    private JFormattedTextField widthTextField;
+    private JFormattedTextField weightTextField;
 
     @PostConstruct
     private void preparePanel() {
@@ -71,6 +71,7 @@ public class ProductFormPanel extends JPanel {
         heightTextField = createNumberField();
         widthTextField = createNumberField();
         weightTextField = createNumberField();
+        clearForm();
 
         add(nameLabel);
         add(nameTextField);
@@ -140,10 +141,11 @@ public class ProductFormPanel extends JPanel {
         return new JTextField(TEXT_FIELD_COLUMNS);
     }
 
-    private JTextField createNumberField() {
+    private JFormattedTextField createNumberField() {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         NumberFormatter formatter = new NumberFormatter(decimalFormat);
         formatter.setValueClass(Double.class);
+        formatter.setAllowsInvalid(true);
         formatter.setMinimum(0.0);
         return new JFormattedTextField(formatter);
     }
@@ -162,6 +164,10 @@ public class ProductFormPanel extends JPanel {
 
     private void clearTextField(JTextField textField) {
         textField.setText("");
+    }
+
+    private void clearTextField(JFormattedTextField textField) {
+        textField.setValue(null);
     }
 
     public ProductCreateDto toCreateDto() {

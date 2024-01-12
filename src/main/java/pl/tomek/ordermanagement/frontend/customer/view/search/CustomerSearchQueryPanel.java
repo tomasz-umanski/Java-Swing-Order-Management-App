@@ -29,7 +29,7 @@ public class CustomerSearchQueryPanel extends JPanel {
     private final JLabel toDateLabel = new JLabel("Customer's Order Date To");
     private final JDateChooser toDateChooser = new JDateChooser();
     private final JLabel fromValueLabel = new JLabel("Customer's Order Min Value");
-    private final JTextField fromValueTextField = createNumberField();
+    private final JFormattedTextField fromValueTextField = createNumberField();
 
     @PostConstruct
     private void preparePanel() {
@@ -49,6 +49,12 @@ public class CustomerSearchQueryPanel extends JPanel {
         add(toDateChooser);
         add(fromValueLabel);
         add(fromValueTextField);
+    }
+
+    public void clearForm() {
+        fromDateChooser.setDate(null);
+        toDateChooser.setDate(null);
+        fromValueTextField.setValue(null);
     }
 
     public CustomerSearchQuery toSearchQuery() {
@@ -74,10 +80,11 @@ public class CustomerSearchQueryPanel extends JPanel {
         return null;
     }
 
-    private JTextField createNumberField() {
+    private JFormattedTextField createNumberField() {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         NumberFormatter formatter = new NumberFormatter(decimalFormat);
         formatter.setValueClass(Double.class);
+        formatter.setAllowsInvalid(true);
         formatter.setMinimum(0.0);
         return new JFormattedTextField(formatter);
     }

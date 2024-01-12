@@ -29,10 +29,10 @@ public class OrderItemModalFormPanel extends JPanel {
     private final JLabel discountLabel = new JLabel("Discount");
     private final JLabel netPriceLabel = new JLabel("Net Price");
     private final JLabel grossPriceLabel = new JLabel("Gross Price");
-    private final JTextField quantityTextField = createNumberField();
-    private final JTextField discountTextField = createNumberField();
-    private final JTextField netPriceTextField = createNumberField();
-    private final JTextField grossPriceTextField = createNumberField();
+    private final JFormattedTextField quantityTextField = createNumberField();
+    private final JFormattedTextField discountTextField = createNumberField();
+    private final JFormattedTextField netPriceTextField = createNumberField();
+    private final JFormattedTextField grossPriceTextField = createNumberField();
     private final JLabel productLabel = new JLabel("Product");
     private JComboBox<ProductDto> productComboBox;
     private final ProductComboBoxModel productComboBoxModel;
@@ -91,10 +91,10 @@ public class OrderItemModalFormPanel extends JPanel {
     }
 
     public void clearForm() {
-        quantityTextField.setText("");
-        discountTextField.setText("");
-        netPriceTextField.setText("");
-        grossPriceTextField.setText("");
+        quantityTextField.setValue(null);
+        discountTextField.setValue(null);
+        netPriceTextField.setValue(null);
+        grossPriceTextField.setValue(null);
     }
 
     public OrderItemCreateDto toCreateDto() {
@@ -119,10 +119,11 @@ public class OrderItemModalFormPanel extends JPanel {
         );
     }
 
-    private JTextField createNumberField() {
+    private JFormattedTextField createNumberField() {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         NumberFormatter formatter = new NumberFormatter(decimalFormat);
         formatter.setValueClass(Double.class);
+        formatter.setAllowsInvalid(true);
         formatter.setMinimum(0.0);
         return new JFormattedTextField(formatter);
     }

@@ -18,6 +18,8 @@ import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQuer
 import pl.tomek.ordermanagement.frontend.customer.view.search.CustomerSearchQueryPanel;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -70,6 +72,7 @@ public class CustomerFrameController extends AbstractFrameController {
         registerAction(customerAdditionButtonPanel.saveButton(), e -> saveEntity());
 
         registerAction(customerSearchButtonPanel.searchButton(), e -> searchByQuery());
+        registerAction(customerSearchButtonPanel.clearButton(), e -> clearSearchQueries());
     }
 
     private void searchByQuery() {
@@ -86,6 +89,10 @@ public class CustomerFrameController extends AbstractFrameController {
         } catch (CustomerCreateDtoValidatorException e) {
             Notifications.showFormValidationAlert(e.getMessage());
         }
+    }
+
+    private void clearSearchQueries() {
+        customerFrame.customerSearchPanel().customerSearchQueryPanel().clearForm();
     }
 
     private void showAddModal() {
@@ -134,10 +141,9 @@ public class CustomerFrameController extends AbstractFrameController {
 
     private void loadOrdersForCustomer(List<CustomerOrderDto> customerOrderDtoList) {
         customerOrderTableModel.clear();
-        if (customerOrderDtoList != null && !customerOrderDtoList.isEmpty()) {
-            customerOrderTableModel.addEntities(customerOrderDtoList);
-        }
+        customerOrderTableModel.addEntities(customerOrderDtoList != null ? customerOrderDtoList : Collections.emptyList());
     }
+
 
     private void hideAddModal() {
         customerDialog.customerAdditionFormPanel().clearForm();
