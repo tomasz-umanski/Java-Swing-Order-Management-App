@@ -99,6 +99,7 @@ public class ShippingAddressFormPanel extends JPanel {
 
     public void prepareDetailsPanel(AddressDto addressDto) {
         removeAll();
+        clearForm(true);
         addFields(false);
         addShippingAddressCheckbox.setVisible(false);
         sameAsHomeAddressCheckbox.setVisible(false);

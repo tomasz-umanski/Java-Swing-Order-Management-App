@@ -11,7 +11,8 @@ public class OrderTableModel extends DefaultTableModel<OrderDto> {
     private static final int ORDER_DATE_INDEX = 1;
     private static final int CUSTOMER_INDEX = 2;
     private static final int SHIPPING_ADDRESS_INDEX = 3;
-    private static final int ORDER_ITEMS_INDEX = 4;
+    private static final int ORDER_VALUE_INDEX = 4;
+
 
     @Override
     public String[] getColumnLabels() {
@@ -20,7 +21,7 @@ public class OrderTableModel extends DefaultTableModel<OrderDto> {
                 "Order Date",
                 "Customer",
                 "Shipping Address",
-                "Order Items"
+                "Order Value"
         };
     }
 
@@ -32,7 +33,7 @@ public class OrderTableModel extends DefaultTableModel<OrderDto> {
             case ORDER_DATE_INDEX -> orderDto.orderDate();
             case CUSTOMER_INDEX -> orderDto.customer();
             case SHIPPING_ADDRESS_INDEX -> orderDto.shippingAddress();
-            case ORDER_ITEMS_INDEX -> orderDto.orderItems();
+            case ORDER_VALUE_INDEX -> orderDto.orderValue();
             default -> Strings.EMPTY;
         };
     }
