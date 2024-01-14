@@ -13,6 +13,8 @@ public class CustomerTableModel extends DefaultTableModel<CustomerDto> {
     private static final int TAX_ID_INDEX = 3;
     private static final int HOME_ADDRESS_INDEX = 4;
     private static final int SHIPPING_ADDRESS_INDEX = 5;
+    private static final int ORDERS_VALUE_INDEX = 6;
+
 
     @Override
     public String[] getColumnLabels() {
@@ -22,7 +24,8 @@ public class CustomerTableModel extends DefaultTableModel<CustomerDto> {
                 "Company Name",
                 "Tax Id Number",
                 "Home Address",
-                "Shipping Address"
+                "Shipping Address",
+                "All Orders Value"
         };
     }
 
@@ -37,6 +40,7 @@ public class CustomerTableModel extends DefaultTableModel<CustomerDto> {
             case TAX_ID_INDEX -> customerDto.taxIdNumber();
             case HOME_ADDRESS_INDEX -> customerDto.homeAddress();
             case SHIPPING_ADDRESS_INDEX -> customerDto.shippingAddress();
+            case ORDERS_VALUE_INDEX -> customerDto.ordersValue();
             default -> Strings.EMPTY;
         };
     }

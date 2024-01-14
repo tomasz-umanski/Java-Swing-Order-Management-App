@@ -33,6 +33,7 @@ public class CustomerTablePanel extends JPanel {
         table = new JTable(customerTableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(30);
+        table.setAutoCreateRowSorter(true);
 
         JScrollPane paneWithTable = new JScrollPane(table);
         add(paneWithTable, BorderLayout.CENTER);
